@@ -18,7 +18,7 @@ const Footer = () => {
               </p>
             </div>
             {/* Social Media Icons - Example placeholders */}
-            <div className="flex mt-4 lg:mt-0">
+            {/* <div className="flex mt-4 lg:mt-0">
               <a href="#" className="ml-2">
                 <img src="/icons/facebook.svg" alt="Facebook" className="h-6 w-6" />
               </a>
@@ -28,7 +28,7 @@ const Footer = () => {
               <a href="#" className="ml-2">
                 <img src="/icons/instagram.svg" alt="Instagram" className="h-6 w-6" />
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </footer>

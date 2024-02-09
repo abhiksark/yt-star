@@ -8,13 +8,13 @@ const Header = () => {
         <p className="text-md lg:text-lg mt-2">Discover, connect, and engage with your favorite creators</p>
       </div>
       {/* Optional: Include a search bar or filter options here */}
-      <div className="w-full lg:w-auto">
+      {/* <div className="w-full lg:w-auto">
         <input
           type="text"
           placeholder="Search YouTubers..."
           className="w-full lg:w-auto px-4 py-2 rounded-lg text-black"
         />
-      </div>
+      </div> */}
     </header>
   );
 };
