@@ -1,3 +1,5 @@
+// next.config.js
+
 import nextMDX from '@next/mdx'
 import remarkGfm from 'remark-gfm'
 import rehypePrismPlus from 'rehype-prism-plus'
@@ -19,8 +21,16 @@ const withMDX = nextMDX({
   options: {
     remarkPlugins: [remarkGfm, remarkCodeTitles],
     rehypePlugins: [rehypePrismPlus, rehypePresetMinify],
-        providerImportSource: '@mdx-js/react',
+    providerImportSource: '@mdx-js/react',
   },
 })
 
-export default withMDX(nextConfig)
+// Including image domain configuration
+const finalConfig = {
+  ...withMDX(nextConfig),
+  images: {
+    domains: ['yt3.googleusercontent.com'], // Add the hostname here
+  },
+};
+
+export default finalConfig;
