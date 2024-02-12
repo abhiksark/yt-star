@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { DefaultSeo } from 'next-seo';
-import SEO from './next-seo.config'
 import Footer from '@/components/Footer'; // Make sure the path is correct
 import Header from '@/components/Header'; // Make sure the path is correct
 
@@ -24,7 +22,6 @@ export default function App({ Component, pageProps, router }) {
 
   return (
     <>
-      <DefaultSeo {...SEO} />
       <div className="relative min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow">
