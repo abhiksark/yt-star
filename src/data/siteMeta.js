@@ -19,10 +19,11 @@ export const categories = [
     
     ];
 
-export const channelsData = [
+export const channelsData = [  
     {
       id: 1,
       name: "Gaurav Sen",
+      slug: "gaurav-sen",
       category: "Software Development",
       subscriberCount: "547K",
       videoCount: "289",
@@ -34,6 +35,7 @@ export const channelsData = [
     {
       id: 2,
       name: 'Arpit Bhayani',
+      slug : 'arpit',
       category: 'System Design',
       logoUrl: 'https://yt3.googleusercontent.com/q4pQdGZdT9Suk5Yu7cm0KI9pLMSaFhEeKQtyZCYjFeJRcbODjS4V5J9AQhN96TYOHXI-rgZ5TA=s176-c-k-c0x00ffffff-no-rj',
       subscriberCount: '81.7k',
@@ -46,6 +48,7 @@ export const channelsData = [
     {
       id: 3,
       name: 'CodeWithHarry',
+      slug: 'harry',
       category: 'Programming & Development',
       logoUrl: 'https://yt3.googleusercontent.com/ytc/AIf8zZTNiWLD2-Qw1eWFmRJkGBzfI-8oFNmYk5tBnpNurQ=s176-c-k-c0x00ffffff-no-rj',
       subscriberCount: "5.44M",
@@ -58,7 +61,8 @@ export const channelsData = [
       id: 4,
       name: 'Theo - t3.gg',
       logoUrl: 'https://yt3.googleusercontent.com/4NapxEtLcHQ6wN2zA_DMmkOk47RFb_gy6sjSmUZGg_ARHjlIUjFsrNFddrcKMkTYpBNxCp3J=s176-c-k-c0x00ffffff-no-rj',
-      category: 'Cooking',
+      category: 'Coding',
+      slug: 'Theo',
       subscriberCount: "217K",
       videoCount: "343",
       description: 'Join Amy as she explores delicious recipes from around the world and shares cooking tips.',
@@ -70,6 +74,8 @@ export const channelsData = [
       name: 'Fireship',
       logoUrl: 'https://yt3.googleusercontent.com/q4pQdGZdT9Suk5Yu7cm0KI9pLMSaFhEeKQtyZCYjFeJRcbODjS4V5J9AQhN96TYOHXI-rgZ5TA=s176-c-k-c0x00ffffff-no-rj',
       category: 'Tech',
+      slug: 'Fireship',
+
       subscriberCount: "2.78M",
       videoCount: "603",
       Complexity: 3,
@@ -81,6 +87,8 @@ export const channelsData = [
       name: 'Corey Schafer',
       logoUrl: 'https://yt3.googleusercontent.com/q4pQdGZdT9Suk5Yu7cm0KI9pLMSaFhEeKQtyZCYjFeJRcbODjS4V5J9AQhN96TYOHXI-rgZ5TA=s176-c-k-c0x00ffffff-no-rj',
       category: 'Education',
+      slug: 'Corey',
+
       subscriberCount: "1.27M",
         videoCount: "232",
       description: 'Join Amy as she explores delicious recipes from around the world and shares cooking tips.',

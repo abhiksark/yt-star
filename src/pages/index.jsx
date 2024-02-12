@@ -2,6 +2,8 @@
 
 
 import Head from 'next/head';
+import Link from 'next/link';
+
 // import Navbar from '../components/Navbar'; // Uncomment if you have a Navbar component
 import ChannelsGrid from '../components/ChannelsGrid';
 import SearchBar from '../components/SearchBar'; // Make sure to create this component

@@ -25,7 +25,7 @@ const Creator = {
 };
 
 
-const CreatorPage = () => {
+const CreatorPage = ( ) => {
     return (
         <div className="bg-gray-900 min-h-screen text-white">
             <Head>
