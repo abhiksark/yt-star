@@ -9,6 +9,9 @@ import CreatorProfile from '../creator_page';
 
 // Assuming CreatorProfile and other components are defined either in this file or imported
 
+
+
+
 export async function getStaticPaths() {
   // Generate paths based on the slugs of creators in channelsData
   const paths = channelsData.map((channel) => ({
@@ -42,8 +45,8 @@ const CreatorPage = ({ creator }) => {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-
   return (
+
     <div className="bg-gray-900 min-h-screen text-white">
       <Head>
         <title>{creator.name} - YouTube Channel</title>

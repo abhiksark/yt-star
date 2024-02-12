@@ -1,73 +1,5 @@
-// pages/creator_page.jsx
 import Head from 'next/head';
 import Image from 'next/image';
-
-
-// const Creator = {
-//     name: 'John Doe',
-//     username: 'johndoe',
-//     description: 'John Doe is a content creator focused on technology and software development, sharing insights and tutorials to help developers grow.',
-//     profilePicture: "https://yt3.googleusercontent.com/rsKAERVEXNTq6lbdIHUlm3aVAw4R2D1fPkDz-7sPccu9qwic5EYfSe6VI7tNB5-_r0Ip5_P0=s176-c-k-c0x00ffffff-no-rj",
-
-//     subscribers: '250K',
-//     country: 'US',
-//     language: "EN",
-//     views: '5M',
-//     engagementRate: 4, // Assuming this is a 5-star scale
-//     tags: ['Software Development', 'Tutorials', 'Tech Reviews', 'Programming'],
-//     social: {
-//         facebook: 'https://facebook.com/johndoe',
-//         twitter: 'https://twitter.com/johndoe',
-//         instagram: 'https://instagram.com/johndoe',
-//         youtube: 'https://youtube.com/johndoe',
-//     },
-//     longDescription: 'With a passion for technology and teaching, John Doe has been creating content for over five years, covering topics from beginner programming to advanced software engineering techniques. Join the journey to explore the latest in tech and software development.',
-// };
-
-
-const CreatorPage = ({ creator }) => {
-    console.log(creator);
-    return (
-        <div className="bg-gray-900 min-h-screen text-white">
-            <Head>
-                <title>{creator.name} - YouTube Channel</title>
-                <meta name="description" content={`Discover and engage with the content from ${creator.name} on YouTube.`} />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-
-            <main className="container mx-auto px-4 pt-6">
-                <section>
-                    <CreatorProfile creator={creator} />
-
-                </section>
-
-                <section className="my-4">
-                    <h2 className="text-2xl font-bold mb-3">Popular Videos</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* Map over popular videos here */}
-                        <VideoCard />
-                        <VideoCard />
-                        <VideoCard />
-                    </div>
-                </section>
-
-                <section className="my-4">
-                    <h2 className="text-2xl font-bold mb-3">Popular Playlists</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* Map over popular playlists here */}
-                        <PlaylistCard />
-                        <PlaylistCard />
-                        <PlaylistCard />
-                    </div>
-                </section>
-
-                {/* Additional sections like Featured Comments, Upcoming Live Streams, etc. can be added here */}
-
-            </main>
-        </div>
-    );
-};
-
 
 const ProfileHeader = ({ creator, countryFlagUrl, profilePictureUrl }) => (
     <div className="space-y-4 flex flex-col items-center text-center md:text-left">
@@ -163,5 +95,3 @@ const PlaylistCard = () => (
         </div>
     </div>
 );
-
-export default CreatorPage;
