@@ -12,7 +12,7 @@ const ChannelCard = ({ channel }) => {
       </div>
       <div>
         <ChannelStats subscriberCount={channel.subscriberCount} videoCount={channel.videoCount} />
-        <ChannelDescription description={channel.description} />
+        {/* <ChannelDescription description={channel.description} /> */}
         <ChannelRating rating={channel.Complexity} reviewsCount={channel.reviewsCount} />
       </div>
     </div>
