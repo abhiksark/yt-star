@@ -3,14 +3,18 @@ import Image from 'next/image';
 // Main ChannelCard component
 const ChannelCard = ({ channel }) => {
   return (
-    <div className="bg-gray-800 text-white p-5 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 max-w-sm mx-auto">
-      <ChannelLogo logoUrl={channel.logoUrl} />
-      <ChannelName name={channel.name} />
-      <ChannelStats subscriberCount={channel.subscriberCount} videoCount={channel.videoCount} />
-      <ChannelCategory category={channel.category} />
-      <ChannelTags tags={channel.tags} />
-      <ChannelDescription description={channel.description} />
-      <ChannelRating rating={channel.Complexity} reviewsCount={channel.reviewsCount} />
+    <div className="bg-gray-800 text-white p-5 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 max-w-sm mx-auto flex flex-col h-full justify-between">
+      <div>
+        <ChannelLogo logoUrl={channel.logoUrl} />
+        <ChannelName name={channel.name} />
+        <ChannelCategory category={channel.category} />
+        <ChannelTags tags={channel.tags} />
+      </div>
+      <div>
+        <ChannelStats subscriberCount={channel.subscriberCount} videoCount={channel.videoCount} />
+        <ChannelDescription description={channel.description} />
+        <ChannelRating rating={channel.Complexity} reviewsCount={channel.reviewsCount} />
+      </div>
     </div>
   );
 };
