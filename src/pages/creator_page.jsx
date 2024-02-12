@@ -26,7 +26,13 @@ import Image from 'next/image';
 
 
 const CreatorPage = ({ creator }) => {
-    console.log(creator);
+    // console.log(creator);
+    const CreatorPage = ({ creator }) => {
+        if (!creator) {
+            // Fallback content, loading state, or redirect logic
+            return <div>Creator not found</div>;
+        }
+    }
     return (
         <div className="bg-gray-900 min-h-screen text-white">
             <Head>
@@ -164,4 +170,4 @@ const PlaylistCard = () => (
     </div>
 );
 
-export default CreatorPage;
+export default CreatorPage
