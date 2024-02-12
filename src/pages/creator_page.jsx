@@ -26,20 +26,17 @@ import Image from 'next/image';
 
 
 const CreatorPage = ({ creator }) => {
-    // console.log(creator);
-    const CreatorPage = ({ creator }) => {
-        if (!creator) {
-            // Fallback content, loading state, or redirect logic
-            return <div>Creator not found</div>;
-        }
+    if (!creator) {
+        return <div>Creator not found</div>;
     }
+    
     return (
         <div className="bg-gray-900 min-h-screen text-white">
-            {/* <Head>
+            <Head>
                 <title>{creator.name} - YouTube Channel</title>
                 <meta name="description" content={`Discover and engage with the content from ${creator.name} on YouTube.`} />
                 <link rel="icon" href="/favicon.ico" />
-            </Head> */}
+            </Head>
 
             <main className="container mx-auto px-4 pt-6">
                 <section>
