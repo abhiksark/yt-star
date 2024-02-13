@@ -120,7 +120,7 @@ const CreatorStats = ({ subscribers, views }) => (
 
 
 const CreatorProfile = ({ creator }) => {
-    const countryFlagUrl = `https://flagcdn.com/w20/${creator.country.toLowerCase()}.png`;
+    const countryFlagUrl = `https://flagcdn.com/w40/${creator.country.toLowerCase()}.png`;
     const profilePictureUrl = creator.logoUrl || '/path/to/default/image.png';
 
     return (
