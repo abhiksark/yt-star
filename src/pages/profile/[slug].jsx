@@ -5,17 +5,13 @@ import { useRouter } from 'next/router';
 import { channelsData } from '../../data/siteMeta';
 import CreatorProfile from '../creator_page';
 
-// Import components used in CreatorProfile
-
-// Assuming CreatorProfile and other components are defined either in this file or imported
-
-
-
+// Import CreatorProfile and other necessary components
+// Ensure CreatorProfile is correctly imported to be used within this page
 
 export async function getStaticPaths() {
   // Generate paths based on the slugs of creators in channelsData
-  const paths = channelsData.map((channel) => ({
-    params: { slug: channel.slug.toString()  }, // Adjust based on your data
+  const paths = channelsData.map(channel => ({
+    params: { slug: channel.slug.toString() }, // Adjust based on your data structure
   }));
 
   return { paths, fallback: false };
@@ -23,9 +19,8 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   // Find the creator data by slug
-  const creator = channelsData.find((channel) => channel.slug === params.slug); // Adjust based on your data
+  const creator = channelsData.find(channel => channel.slug === params.slug); // Adjust based on your data
   
-  // If the creator doesn't exist, return an empty object (or handle as a 404)
   if (!creator) {
     return {
       notFound: true,
@@ -40,14 +35,13 @@ export async function getStaticProps({ params }) {
 }
 
 const CreatorPage = ({ creator }) => {
-  // If using fallback: true, you can add loading states here
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  return (
 
-    <div className="bg-gray-900 min-h-screen text-white">
+  return (
+    <div className="bg-gray-50 min-h-screen text-gray-900">
       <Head>
         <title>{creator.name} - YouTube Channel</title>
         <meta name="description" content={`Discover and engage with the content from ${creator.name} on YouTube.`} />
@@ -55,8 +49,9 @@ const CreatorPage = ({ creator }) => {
       </Head>
 
       <main className="container mx-auto px-4 pt-6">
+        {/* Assuming CreatorProfile component is properly imported and used here */}
         <CreatorProfile creator={creator} />
-        {/* Render additional sections like videos and playlists */}
+        {/* Additional sections for videos and playlists would also follow the aesthetic */}
       </main>
     </div>
   );
