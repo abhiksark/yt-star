@@ -1,3 +1,5 @@
+// src/pages/creator_page.jsx
+
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
