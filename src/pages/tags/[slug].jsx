@@ -1,17 +1,20 @@
-// src/pages/tags/[slug].jsx
-
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-// Assuming you have a method to fetch data based on the tag's slug
-// This is a placeholder function, replace it with your actual data fetching logic
+// Import the channelsData
+import { channelsData } from '../../data/siteMeta'; 
+
+// Function to fetch data based on the tag's slug
 const fetchTagData = async (slug) => {
-  // Fetch data related to the tag using the slug
-  // This could be a call to your backend or a local data structure
+  // Filter channels that include the tag in their tags array
+  const relatedContent = channelsData.filter(channel =>
+    channel.tags.includes(slug.replace('-', ' ')) // Assuming slug uses '-' for spaces
+  );
+
   return {
-    tagName: slug,
-    relatedContent: [], // Replace with actual data fetched based on the slug
+    tagName: slug.replace('-', ' '), // Convert slug back to tag name
+    relatedContent,
   };
 };
 
@@ -22,7 +25,7 @@ const TagPage = () => {
 
   useEffect(() => {
     if (!slug) return; // Ensure slug is not undefined
-    fetchTagData(slug).then(setTagData);
+    fetchTagData(slug).then(data => setTagData(data));
   }, [slug]);
 
   if (!tagData) {
@@ -38,8 +41,12 @@ const TagPage = () => {
       <h1 className="text-2xl font-bold">Tag: {tagData.tagName}</h1>
       {/* Render related content */}
       {tagData.relatedContent.length > 0 ? (
-        tagData.relatedContent.map((content) => (
-          <div key={content.id}>{content.title}</div>
+        tagData.relatedContent.map((channel) => (
+          <div key={channel.id} className="mb-4">
+            <h2 className="text-lg font-semibold">{channel.name}</h2>
+            <p>{channel.description}</p>
+            {/* Add more channel details here as needed */}
+          </div>
         ))
       ) : (
         <p>No content found for this tag.</p>

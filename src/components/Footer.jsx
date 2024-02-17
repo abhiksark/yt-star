@@ -9,8 +9,8 @@ const Footer = () => {
           {/* Footer Links */}
           <a href="about" className="hover:text-blue-200 transition-colors duration-300">About</a>
           <a href="ContactUs" className="hover:text-blue-200 transition-colors duration-300">Contact Us</a>
-          <a href="#" className="hover:text-blue-200 transition-colors duration-300">Privacy Policy</a>
-          <a href="#" className="hover:text-blue-200 transition-colors duration-300">Terms of Use</a>
+          <a href="privacypolicy" className="hover:text-blue-200 transition-colors duration-300">Privacy Policy</a>
+          <a href="tos" className="hover:text-blue-200 transition-colors duration-300">Terms of Use</a>
         </div>
         <div className="flex justify-center items-center flex-col lg:flex-row lg:justify-between text-center lg:text-left">
           <div>
