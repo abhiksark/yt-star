@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+
 
 const CreatorPage = ({ creator }) => {
     if (!creator) {
@@ -68,9 +70,11 @@ const ProfileHeader = ({ creator, countryFlagUrl, profilePictureUrl }) => (
 const Tags = ({ tags }) => (
     <div className="flex flex-wrap justify-center gap-2">
         {tags.map((tag) => (
-            <span key={tag} className="bg-blue-100 text-blue-800 text-xs py-1 px-3 rounded-full shadow-inner">
-                {tag}
-            </span>
+            <Link key={tag} href={`/tags/${encodeURIComponent(tag)}`} passHref>
+                <a className="bg-blue-100 text-blue-800 text-xs py-1 px-3 rounded-full shadow-inner hover:bg-blue-200 transition duration-150 ease-in-out">
+                    {tag}
+                </a>
+            </Link>
         ))}
     </div>
 );
