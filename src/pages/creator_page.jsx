@@ -1,106 +1,72 @@
-// pages/creator_page.jsx
 import Head from 'next/head';
 import Image from 'next/image';
 
-
-// const Creator = {
-//     name: 'John Doe',
-//     username: 'johndoe',
-//     description: 'John Doe is a content creator focused on technology and software development, sharing insights and tutorials to help developers grow.',
-//     profilePicture: "https://yt3.googleusercontent.com/rsKAERVEXNTq6lbdIHUlm3aVAw4R2D1fPkDz-7sPccu9qwic5EYfSe6VI7tNB5-_r0Ip5_P0=s176-c-k-c0x00ffffff-no-rj",
-
-//     subscribers: '250K',
-//     country: 'US',
-//     language: "EN",
-//     views: '5M',
-//     engagementRate: 4, // Assuming this is a 5-star scale
-//     tags: ['Software Development', 'Tutorials', 'Tech Reviews', 'Programming'],
-//     social: {
-//         facebook: 'https://facebook.com/johndoe',
-//         twitter: 'https://twitter.com/johndoe',
-//         instagram: 'https://instagram.com/johndoe',
-//         youtube: 'https://youtube.com/johndoe',
-//     },
-//     longDescription: 'With a passion for technology and teaching, John Doe has been creating content for over five years, covering topics from beginner programming to advanced software engineering techniques. Join the journey to explore the latest in tech and software development.',
-// };
-
-
 const CreatorPage = ({ creator }) => {
     if (!creator) {
-        return <div>Creator not found</div>;
+        return <div className="text-center py-10 text-gray-600">Creator not found</div>;
     }
-    
+
     return (
-        <div className="bg-gray-900 min-h-screen text-white">
+        <div className="bg-gray-100 min-h-screen text-gray-800">
             <Head>
-                <title>{creator.name} - YouTube Channel</title>
-                <meta name="description" content={`Discover and engage with the content from ${creator.name} on YouTube.`} />
+                <title>{creator.name} - Educational Channel</title>
+                <meta name="description" content={`Explore educational content from ${creator.name}.`} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <main className="container mx-auto px-4 pt-6">
-                <section>
-                    <CreatorProfile creator={creator} />
-
-                </section>
-
-                <section className="my-4">
-                    <h2 className="text-2xl font-bold mb-3">Popular Videos</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* Map over popular videos here */}
-                        <VideoCard />
-                        <VideoCard />
-                        <VideoCard />
-                    </div>
-                </section>
-
-                <section className="my-4">
-                    <h2 className="text-2xl font-bold mb-3">Popular Playlists</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {/* Map over popular playlists here */}
-                        <PlaylistCard />
-                        <PlaylistCard />
-                        <PlaylistCard />
-                    </div>
-                </section>
-
-                {/* Additional sections like Featured Comments, Upcoming Live Streams, etc. can be added here */}
-
+                <SearchAndFilter />
+                <CreatorProfile creator={creator} />
+                <FeaturedVideos videos={creator.videos} />
+                <CuratedPlaylists playlists={creator.playlists} />
             </main>
         </div>
     );
 };
 
-
-const ProfileHeader = ({ creator, countryFlagUrl, profilePictureUrl }) => (
-    <div className="space-y-4 flex flex-col items-center text-center md:text-left">
-        <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-gray-600">
-            <Image src={profilePictureUrl} alt={`${creator.name} Profile Picture`} layout="fill" objectFit="cover" />
-        </div>
-        <div className="flex items-center justify-center md:justify-start space-x-2">
-            <div className="w-8 h-5">
-                <Image src={countryFlagUrl} alt={`${creator.country} Flag`} layout="responsive" width={24} height={15} />
-            </div>
-            <span className="bg-gray-700 text-xs px-2 py-1 rounded-full">{creator.language}</span>
-        </div>
-        {/* <h2 className="text-3xl md:text-4xl font-bold">{creator.name}</h2> */}
+const SearchAndFilter = () => (
+    <div className="flex flex-col sm:flex-row justify-between items-center py-4 bg-white rounded-lg mx-2 mb-6 shadow border border-gray-200">
+        <input type="text" placeholder="Search for topics, creators..." className="input text-gray-700 w-full sm:w-auto p-2 rounded-lg m-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
+        {/* Additional filters can be implemented here */}
     </div>
 );
 
-const SocialIcons = ({ socials }) => (
-    <div className="flex justify-center md:justify-start items-center space-x-4">
-        {socials.map(({ platform, url }) => (
-            <a key={platform} href={url} target="_blank" rel="noopener noreferrer" className="text-xl hover:text-yellow-400 transition duration-200">
-                <i className={`fab fa-${platform.toLowerCase()} hover:scale-110 transition-transform`}></i>
-            </a>
-        ))}
+const CreatorProfile = ({ creator }) => {
+    const countryFlagUrl = `https://flagcdn.com/w40/${creator.country.toLowerCase()}.png`;
+    const profilePictureUrl = creator.profilePicture || '/path/to/default/image.png';
+
+    return (
+        <article className="text-gray-800 p-6 rounded-xl shadow-lg mx-2 mb-6 flex flex-col md:flex-row items-center space-y-6 md:space-x-8 bg-white border border-gray-200">
+            <ProfileHeader creator={creator} countryFlagUrl={countryFlagUrl} profilePictureUrl={profilePictureUrl} />
+            <div className="flex-1 space-y-4">
+                <h2 className="text-3xl font-bold">{creator.name}</h2>
+                <p className="text-sm leading-relaxed text-gray-600">{creator.description}</p>
+                <Tags tags={creator.tags} />
+                <div className="flex justify-center md:justify-start items-center space-x-2">
+                    {'🌟'.repeat(Math.floor(creator.engagementRate)) || 'N/A'}
+                </div>
+                <CreatorStats subscribers={creator.subscribers} views={creator.views} />
+            </div>
+        </article>
+    );
+};
+
+const ProfileHeader = ({ creator, countryFlagUrl, profilePictureUrl }) => (
+    <div className="flex flex-col items-center text-center">
+        <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-blue-300 shadow-sm">
+            <Image src={profilePictureUrl} alt={`${creator.name} Profile Picture`} layout="fill" objectFit="cover" />
+        </div>
+        <div className="flex items-center justify-center space-x-2 mt-3">
+            <Image src={countryFlagUrl} alt={`${creator.country} Flag`} width={24} height={15} />
+            <span className="bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full">{creator.language}</span>
+        </div>
     </div>
 );
 
 const Tags = ({ tags }) => (
-    <div className="flex flex-wrap justify-center md:justify-start gap-2">
-        {tags.map(tag => (
-            <span key={tag} className="bg-gradient-to-r from-purple-500 to-purple-800 text-xs md:text-sm py-1 px-3 rounded-full shadow-md">
+    <div className="flex flex-wrap justify-center gap-2">
+        {tags.map((tag) => (
+            <span key={tag} className="bg-blue-100 text-blue-800 text-xs py-1 px-3 rounded-full shadow-inner">
                 {tag}
             </span>
         ))}
@@ -108,63 +74,24 @@ const Tags = ({ tags }) => (
 );
 
 const CreatorStats = ({ subscribers, views }) => (
-    <div className="flex justify-center md:justify-start items-center space-x-4 mt-4">
-        <div className="flex items-center space-x-1">
-            <i className="fas fa-users text-lg"></i> <span className="text-md font-medium">{subscribers} Subscribers</span>
-        </div>
-        <div className="flex items-center space-x-1">
-            <i className="fas fa-eye text-lg"></i> <span className="text-md font-medium">{views} Views</span>
-        </div>
+    <div className="flex justify-center md:justify-start items-center space-x-4">
+        <span className="text-md font-medium text-gray-700"><i className="fas fa-users"></i> {subscribers} Subscribers</span>
+        <span className="text-md font-medium text-gray-700"><i className="fas fa-eye"></i> {views} Views</span>
     </div>
 );
 
-
-const CreatorProfile = ({ creator }) => {
-    const countryFlagUrl = `https://flagcdn.com/w40/${creator.country.toLowerCase()}.png`;
-    const profilePictureUrl = creator.logoUrl || '/path/to/default/image.png';
-
-    return (
-        <article className="bg-gray-900 text-white p-6 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 ease-in-out mx-auto max-w-4xl flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
-            <ProfileHeader creator={creator} countryFlagUrl={countryFlagUrl} profilePictureUrl={profilePictureUrl} />
-            <div className="flex-1 space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold">{creator.name}</h2>
-
-                <p className="text-sm md:text-base leading-relaxed">{creator.description}</p>
-                <Tags tags={creator.tags} />
-                <div className="flex justify-center md:justify-start items-center space-x-2 text-yellow-500 text-xl">
-                    {'🌟'.repeat(Math.floor(creator.engagementRate))}
-                </div>
-                {/* Buttons and SocialIcons can be directly included here as needed */}
-                <CreatorStats subscribers={creator.subscriberCount} views={creator.views} />
-            </div>
-        </article>
-    );
-};
-
-
-
-// Reusable video card component
-const VideoCard = () => (
-    <div className="bg-gray-800 p-4 rounded-lg">
-        <div className="mb-2">
-            {/* Thumbnail image */}
-            <div className="bg-gray-700 h-48 mb-2"></div>
-            <h3 className="text-lg font-semibold">Video Title</h3>
-            <p className="text-gray-400">X views • Y days ago</p>
-        </div>
-    </div>
+const FeaturedVideos = ({ videos }) => (
+    <section className="my-6">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Featured Videos</h2>
+        {/* Video cards grid, simplified for brevity */}
+    </section>
 );
 
-// Reusable playlist card component
-const PlaylistCard = () => (
-    <div className="bg-gray-800 p-4 rounded-lg">
-        <div className="mb-2">
-            {/* Thumbnail image */}
-            <div className="bg-gray-700 h-48 mb-2"></div>
-            <h3 className="text-lg font-semibold">Playlist Title</h3>
-            <p className="text-gray-400">X videos</p>
-        </div>
-    </div>
+const CuratedPlaylists = ({ playlists }) => (
+    <section className="mb-6">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Curated Playlists</h2>
+        {/* Playlist cards grid, simplified for brevity */}
+    </section>
 );
 
-export default CreatorPage
+export default CreatorPage;
