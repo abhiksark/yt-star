@@ -1,5 +1,6 @@
-import Link from 'next/link';
+// src/components/Header.jsx
 
+import Link from 'next/link';
 
 const Header = () => {
   return (

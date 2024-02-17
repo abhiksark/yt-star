@@ -7,8 +7,8 @@ const Footer = () => {
       <div className="max-w-screen-xl mx-auto px-4 lg:px-8">
         <div className="flex flex-wrap justify-center gap-4 mb-4 text-center lg:text-left">
           {/* Footer Links */}
-          <a href="#" className="hover:text-blue-200 transition-colors duration-300">About</a>
-          <a href="#" className="hover:text-blue-200 transition-colors duration-300">Contact Us</a>
+          <a href="about" className="hover:text-blue-200 transition-colors duration-300">About</a>
+          <a href="ContactUs" className="hover:text-blue-200 transition-colors duration-300">Contact Us</a>
           <a href="#" className="hover:text-blue-200 transition-colors duration-300">Privacy Policy</a>
           <a href="#" className="hover:text-blue-200 transition-colors duration-300">Terms of Use</a>
         </div>
