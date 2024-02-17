@@ -15,7 +15,7 @@ const CreatorPage = ({ creator }) => {
             </Head>
 
             <main className="container mx-auto px-4 pt-6">
-                <SearchAndFilter />
+                {/* <SearchAndFilter /> */}
                 <CreatorProfile creator={creator} />
                 <FeaturedVideos videos={creator.videos} />
                 <CuratedPlaylists playlists={creator.playlists} />
@@ -33,10 +33,11 @@ const SearchAndFilter = () => (
 
 const CreatorProfile = ({ creator }) => {
     const countryFlagUrl = `https://flagcdn.com/w40/${creator.country.toLowerCase()}.png`;
-    const profilePictureUrl = creator.profilePicture || '/path/to/default/image.png';
+    const profilePictureUrl = creator.logoUrl || '/path/to/default/image.png';
 
     return (
-        <article className="text-gray-800 p-6 rounded-xl shadow-lg mx-2 mb-6 flex flex-col md:flex-row items-center space-y-6 md:space-x-8 bg-white border border-gray-200">
+        // Add a max-w-4xl for max-width and mx-auto to center it
+        <article className="text-gray-800 p-6 rounded-xl shadow-lg mx-auto mb-6 flex flex-col md:flex-row items-center space-y-6 md:space-x-8 bg-white border border-gray-200 max-w-4xl">
             <ProfileHeader creator={creator} countryFlagUrl={countryFlagUrl} profilePictureUrl={profilePictureUrl} />
             <div className="flex-1 space-y-4">
                 <h2 className="text-3xl font-bold">{creator.name}</h2>
@@ -50,6 +51,7 @@ const CreatorProfile = ({ creator }) => {
         </article>
     );
 };
+
 
 const ProfileHeader = ({ creator, countryFlagUrl, profilePictureUrl }) => (
     <div className="flex flex-col items-center text-center">

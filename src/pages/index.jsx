@@ -1,3 +1,5 @@
+// src/pages/index.jsx
+
 import Head from 'next/head';
 import Link from 'next/link';
 // Assuming Navbar, SearchBar, and Categories components follow the established design harmony

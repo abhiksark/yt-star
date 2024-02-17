@@ -1,3 +1,5 @@
+// src/components/ChannelCard.jsx
+
 import Image from 'next/image';
 
 // Main ChannelCard component with updated design
