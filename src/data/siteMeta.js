@@ -135,7 +135,7 @@ export const channelsData1 = [
 ]
 
 // const fs = require('fs');
-import jsonData from './siteData.json';
+import jsonData from '@/data/siteData.json'
 
 // Load the JSON data from the file
 // export const channelsData = JSON.parse(fs.readFileSync('siteData.json', 'utf8'));
