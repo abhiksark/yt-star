@@ -16,7 +16,7 @@ export const categories = [
   // { name: 'Robotics', slug: 'robotics' },
 ]
 
-export const channelsData = [
+export const channelsData1 = [
   {
     id: 1,
     name: 'Gaurav Sen',
@@ -133,3 +133,18 @@ export const channelsData = [
     Country: 'US',
   },
 ]
+
+// const fs = require('fs');
+import jsonData from './siteData.json';
+
+// Load the JSON data from the file
+// export const channelsData = JSON.parse(fs.readFileSync('siteData.json', 'utf8'));
+export const channelsData = jsonData
+
+// Now you can use channelsData as an array of objects containing your JSON data
+// console.log(channelsData);
+
+
+// load more data using sitedata.json
+// Path: src/data/siteData.js
+
