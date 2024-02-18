@@ -2,6 +2,16 @@
 
 import Image from 'next/image';
 
+
+function formatNumber(num) {
+  if (Math.abs(num) >= 1e6) {
+    return (num / 1e6).toFixed(2) + 'M';
+  } else if (Math.abs(num) >= 1e3) {
+    return (num / 1e3).toFixed(0) + 'k';
+  }
+  return num;
+}
+
 // Main ChannelCard component with updated design
 const ChannelCard = ({ channel }) => {
   return (
@@ -54,11 +64,14 @@ const ChannelStats = ({ subscriberCount, videoCount }) => (
   </div>
 );
 
+
+
+
 // Sub-components for Channel Stats
 const SubscriberCount = ({ subscriberCount }) => (
   <div className="text-center mb-2">
     <span className="mr-2">👥</span>
-    <span className="text-sm font-semibold">{`${subscriberCount.toLocaleString()} Subscribers`}</span>
+    <span className="text-sm font-semibold">{`${formatNumber(subscriberCount).toLocaleString()} Subscribers`}</span>
   </div>
 );
 
