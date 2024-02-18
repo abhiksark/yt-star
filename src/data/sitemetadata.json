@@ -1570,7 +1570,10 @@
             {"id":"MdvzlDIdQ0o"}
         ],
         "playlists":[
-            {"id":"PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk"},
+            {"id":"PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk",
+             "thumbnail":"https://i.ytimg.com/vi/MdvzlDIdQ0o/sddefault.jpg",
+             "name":"Python Tutorials"
+        },
             {"id":"PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk"},
             {"id":"PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk"}
         ]

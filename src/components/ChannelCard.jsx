@@ -1,16 +1,7 @@
 // src/components/ChannelCard.jsx
 
-import Image from 'next/image';
-
-
-function formatNumber(num) {
-  if (Math.abs(num) >= 1e6) {
-    return (num / 1e6).toFixed(2) + 'M';
-  } else if (Math.abs(num) >= 1e3) {
-    return (num / 1e3).toFixed(0) + 'k';
-  }
-  return num;
-}
+import Image from 'next/image'
+import formatNumber from '../lib/utils'
 
 // Main ChannelCard component with updated design
 const ChannelCard = ({ channel }) => {
