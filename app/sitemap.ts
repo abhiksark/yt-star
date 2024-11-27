@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { channelsData, categories } from '@/lib/data';
+import { getAllPosts } from '@/lib/blog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://bestyoutubechannels.com';
@@ -8,8 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     '',
     '/about',
-    '/contact',
-    '/careers',
+    '/blog',
     '/categories',
     '/tags',
     '/signin',
@@ -38,14 +38,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  // Tag pages
-  const tags = Array.from(new Set(channelsData.flatMap((creator) => creator.tags)));
-  const tagPages = tags.map((tag) => ({
-    url: `${baseUrl}/tags/${tag.toLowerCase()}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+  // Blog posts
+  const blogPosts = getAllPosts().map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
     priority: 0.5,
   }));
 
-  return [...staticPages, ...categoryPages, ...creatorPages, ...tagPages];
+  return [...staticPages, ...categoryPages, ...creatorPages, ...blogPosts];
 }
