@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { channelsData } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SimilarCreators } from "@/components/similar-creators";
 import { 
   AlertCircle, 
   Users, 
@@ -58,7 +59,7 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8">
       <Alert variant="default" className="bg-muted/50 border-muted-foreground/20">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription className="text-sm text-muted-foreground">
@@ -152,6 +153,8 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
           </div>
         </TabsContent>
       </Tabs>
+
+      <SimilarCreators currentCreator={creator} allCreators={channelsData} />
     </div>
   );
 }
