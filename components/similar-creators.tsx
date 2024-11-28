@@ -18,16 +18,15 @@ export function SimilarCreators({ currentCreator, allCreators }: SimilarCreators
     .filter((creator) => {
       if (creator.id === currentCreator.id) return false;
       
-      // Check for shared tags
-      const sharedTags = creator.tags.filter(tag => 
-        currentCreator.tags.includes(tag)
+      // Check for shared categories
+      const sharedCategories = creator.category.filter(cat => 
+        currentCreator.category.includes(cat)
       );
       
-      // Calculate similarity score based on shared tags and same category
-      const tagScore = sharedTags.length;
-      const categoryScore = creator.category === currentCreator.category ? 2 : 0;
+      // Calculate similarity score based on shared categories
+      const categoryScore = sharedCategories.length;
       
-      return (tagScore + categoryScore) > 1; // Require at least 2 similarities
+      return categoryScore > 1; // Require at least 2 shared categories
     })
     .slice(0, 3); // Show top 3 similar creators
 
@@ -55,7 +54,7 @@ export function SimilarCreators({ currentCreator, allCreators }: SimilarCreators
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-1">
-                {creator.tags.slice(0, 2).map((tag) => (
+                {creator.category.slice(0, 2).map((tag) => (
                   <Badge
                     key={tag}
                     variant="secondary"

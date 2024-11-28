@@ -23,15 +23,15 @@ export function CreatorGrid({ creators }: CreatorGridProps) {
                   {creator.name}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-1">
-                  {creator.category}
+                  {creator.category.join(', ')}
                 </p>
               </div>
             </div>
             <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-              {creator.description || `${creator.name} is a content creator focusing on ${creator.category}`}
+              {creator.description || `${creator.name} is a content creator focusing on ${creator.category.join(' and ')}`}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {creator.tags.slice(0, 3).map((tag) => (
+              {creator.category.slice(0, 3).map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"

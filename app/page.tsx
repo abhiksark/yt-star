@@ -13,7 +13,7 @@ export default function Home() {
         <div className="absolute inset-0 -z-10 animate-gradient bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
         
-        <div className="space-y-6 max-w-3xl mx-auto">
+        <div className="space-y-8 max-w-3xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter px-4">
             Discover <span className="text-gradient">Top Tech</span> Content Creators
           </h1>
@@ -23,10 +23,15 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
             <SearchCreators />
-            <Button asChild size="lg" className="w-full sm:w-auto group">
-              <Link href="/categories">
+            <Button
+              asChild
+              size="lg"
+              className="w-full sm:w-auto group bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+              aria-label="Browse all content creator categories"
+            >
+              <Link href="/categories" className="flex items-center justify-center gap-2">
                 Browse Categories
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
           </div>

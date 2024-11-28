@@ -7,6 +7,8 @@ import { channelsData } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SimilarCreators } from "@/components/similar-creators";
+import { VideoGrid } from "@/components/video-grid";
+import { PlaylistGrid } from "@/components/playlist-grid";
 import { 
   AlertCircle, 
   Users, 
@@ -46,9 +48,11 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
 }
 
 export function generateStaticParams() {
-  return channelsData.map((creator) => ({
-    slug: creator.slug,
-  }));
+  return channelsData.map((creator) => {
+    return {
+      slug: creator.slug,
+    };
+  });
 }
 
 export default function CreatorProfile({ params }: CreatorPageProps) {
@@ -74,10 +78,10 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
           </Avatar>
           <div>
             <h1 className="text-3xl font-bold">{creator.name}</h1>
-            <p className="text-muted-foreground">{creator.category}</p>
+            <p className="text-muted-foreground">{creator.category.join(', ')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {creator.tags.map((tag) => (
+            {creator.category.map((tag) => (
               <Badge key={tag} variant="secondary">
                 {tag}
               </Badge>
@@ -143,14 +147,10 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
           <TabsTrigger value="playlists">Playlists</TabsTrigger>
         </TabsList>
         <TabsContent value="videos">
-          <div className="text-center py-8 text-muted-foreground">
-            Coming soon: Recent videos from {creator.name}
-          </div>
+          <VideoGrid videos={creator.videoList} />
         </TabsContent>
         <TabsContent value="playlists">
-          <div className="text-center py-8 text-muted-foreground">
-            Coming soon: Popular playlists from {creator.name}
-          </div>
+          <PlaylistGrid playlists={creator.playList} />
         </TabsContent>
       </Tabs>
 

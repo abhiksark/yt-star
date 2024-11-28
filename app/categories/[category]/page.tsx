@@ -24,7 +24,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }
 
   const creators = channelsData.filter(creator => 
-    creator.category.toLowerCase().includes(category.name.toLowerCase())
+    creator.category.some(cat => 
+      cat.toLowerCase().includes(category.name.toLowerCase())
+    )
   );
 
   return {
@@ -59,7 +61,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const creators = channelsData.filter(creator => 
-    creator.category.toLowerCase().includes(category.name.toLowerCase())
+    creator.category.some(cat => 
+      cat.toLowerCase().includes(category.name.toLowerCase())
+    )
   ) as Creator[];
 
   return (
