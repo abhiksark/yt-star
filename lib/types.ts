@@ -11,6 +11,7 @@ export interface Creator {
   language: string;
   categories: string[];
   complexity: number;
+  rating?: number;
 }
 
 export interface Category {
