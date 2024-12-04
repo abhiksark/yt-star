@@ -15,7 +15,7 @@ interface TagPageProps {
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
   const tag = decodeURIComponent(params.tag);
   const creatorsCount = channelsData.filter(creator => 
-    creator.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+    creator.category.some(t => t.toLowerCase() === tag.toLowerCase())
   ).length;
 
   return {
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
 }
 
 export function generateStaticParams() {
-  const tags = new Set(channelsData.flatMap(creator => creator.tags));
+  const tags = new Set(channelsData.flatMap(creator => creator.category));
   return Array.from(tags).map(tag => ({
     tag: tag.toLowerCase(),
   }));
@@ -38,7 +38,7 @@ export function generateStaticParams() {
 export default function TagPage({ params }: TagPageProps) {
   const tag = decodeURIComponent(params.tag);
   const creators = channelsData.filter(creator => 
-    creator.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+    creator.category.some(t => t.toLowerCase() === tag.toLowerCase())
   );
 
   if (creators.length === 0) {

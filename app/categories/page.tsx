@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { categories, channelsData } from "@/lib/data";
+import { categories, getCreators } from "@/lib/data";
 import { CategoryHeader } from "@/components/category-header";
 import { CategoryGrid } from "@/components/category-grid";
 import { CategoryFilter } from "@/components/category-filter";
@@ -11,13 +11,15 @@ export const metadata: Metadata = {
   description: "Explore tech content creators by category. Find experts in system design, frontend, backend, and more.",
 };
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const creators = await getCreators();
+
   return (
     <div className="space-y-8">
       <CategoryHeader />
       <CategoryFilter categories={categories} />
       <Suspense fallback={<CategoryGridSkeleton />}>
-        <CategoryGrid categories={categories} creators={channelsData} />
+        <CategoryGrid categories={categories} creators={creators} />
       </Suspense>
     </div>
   );

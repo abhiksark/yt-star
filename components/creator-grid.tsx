@@ -22,22 +22,19 @@ export function CreatorGrid({ creators }: CreatorGridProps) {
                 <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
                   {creator.name}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-1">
-                  {creator.category}
-                </p>
               </div>
             </div>
             <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-              {creator.description || `${creator.name} is a content creator focusing on ${creator.category}`}
+              {creator.description || `${creator.name} is a content creator focusing on ${creator.categories[0]}`}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {creator.tags.slice(0, 3).map((tag) => (
+              {creator.categories.slice(0, 3).map((category) => (
                 <Badge
-                  key={tag}
+                  key={category}
                   variant="secondary"
                   className="text-xs group-hover:bg-accent/20 transition-colors"
                 >
-                  {tag}
+                  {category}
                 </Badge>
               ))}
             </div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function TagsPage() {
   // Get all unique tags and their counts
   const tagCounts = channelsData.reduce((acc, creator) => {
-    creator.tags.forEach(tag => {
+    creator.category.forEach(tag => {
       acc[tag] = (acc[tag] || 0) + 1;
     });
     return acc;

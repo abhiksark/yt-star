@@ -19,15 +19,14 @@ export function SimilarCreators({ currentCreator, allCreators }: SimilarCreators
       if (creator.id === currentCreator.id) return false;
       
       // Check for shared tags
-      const sharedTags = creator.tags.filter(tag => 
-        currentCreator.tags.includes(tag)
+      const sharedCategories = creator.categories.filter(category => 
+        currentCreator.categories.includes(category)
       );
       
       // Calculate similarity score based on shared tags and same category
-      const tagScore = sharedTags.length;
-      const categoryScore = creator.category === currentCreator.category ? 2 : 0;
+      const categoryScore = sharedCategories.length;
       
-      return (tagScore + categoryScore) > 1; // Require at least 2 similarities
+      return categoryScore > 1; // Require at least 2 shared categories
     })
     .slice(0, 3); // Show top 3 similar creators
 
@@ -55,13 +54,13 @@ export function SimilarCreators({ currentCreator, allCreators }: SimilarCreators
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-1">
-                {creator.tags.slice(0, 2).map((tag) => (
+                {creator.categories.slice(0, 2).map((category) => (
                   <Badge
-                    key={tag}
+                    key={category}
                     variant="secondary"
                     className="text-xs group-hover:bg-accent/20 transition-colors"
                   >
-                    {tag}
+                    {category}
                   </Badge>
                 ))}
               </div>

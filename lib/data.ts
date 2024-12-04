@@ -1,4 +1,5 @@
 import type { Creator, Category } from "@/lib/types";
+import { supabase } from './supabase';
 
 export const categories: Category[] = [
   { name: 'System Design', slug: 'system-design' },
@@ -13,50 +14,30 @@ export const categories: Category[] = [
   { name: 'Mobile', slug: 'mobile' },
 ];
 
-export const channelsData: Creator[] = [
-  {
-    id: 1,
-    name: 'Gaurav Sen',
-    slug: 'gaurav-sen',
-    category: 'System Design',
-    subscriberCount: '547K',
-    description: 'Gaurav Sen is an expert System Design educator focusing on scalable architectures and distributed systems.',
-    views: '5M',
-    country: 'IN',
-    language: 'EN',
-    videoCount: '289',
-    tags: ['System Design', 'Algorithms', 'Architecture'],
-    complexity: 3,
-    logoUrl: 'https://yt3.googleusercontent.com/rsKAERVEXNTq6lbdIHUlm3aVAw4R2D1fPkDz-7sPccu9qwic5EYfSe6VI7tNB5-_r0Ip5_P0=s176-c-k-c0x00ffffff-no-rj',
-  },
-  {
-    id: 2,
-    name: 'Arpit Bhayani',
-    slug: 'arpit',
-    category: 'System Design',
-    logoUrl: 'https://yt3.googleusercontent.com/q4pQdGZdT9Suk5Yu7cm0KI9pLMSaFhEeKQtyZCYjFeJRcbODjS4V5J9AQhN96TYOHXI-rgZ5TA=s176-c-k-c0x00ffffff-no-rj',
-    subscriberCount: '81.7K',
-    views: '5M',
-    videoCount: '120',
-    country: 'IN',
-    language: 'EN',
-    description: 'Arpit Bhayani is a software engineer and educator who creates content on system design, microservices, and distributed systems.',
-    tags: ['Distributed Systems', 'Microservices', 'System Design', 'Architecture'],
-    complexity: 3,
-  },
-  {
-    id: 3,
-    name: 'Theo - t3.gg',
-    logoUrl: 'https://yt3.googleusercontent.com/4NapxEtLcHQ6wN2zA_DMmkOk47RFb_gy6sjSmUZGg_ARHjlIUjFsrNFddrcKMkTYpBNxCp3J=s176-c-k-c0x00ffffff-no-rj',
-    category: 'Frontend',
-    slug: 'theo',
-    subscriberCount: '217K',
-    videoCount: '343',
-    country: 'US',
-    language: 'EN',
-    views: '5M',
-    description: 'Theo shares modern web development practices, TypeScript expertise, and software engineering insights.',
-    tags: ['TypeScript', 'React', 'Next.js', 'Full Stack'],
-    complexity: 3,
-  },
-];
+export async function getCreators(): Promise<Creator[]> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching creators:', error);
+    return [];
+  }
+  
+  return data;
+}
+
+export async function getCreatorBySlug(slug: string): Promise<Creator | null> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+  
+  if (error) {
+    console.error('Error fetching creator:', error);
+    return null;
+  }
+  
+  return data;
+}

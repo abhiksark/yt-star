@@ -3,14 +3,13 @@ export interface Creator {
   name: string;
   slug: string;
   logoUrl: string;
-  category: string;
   description: string;
   subscriberCount: string;
   videoCount: string | number;
   views: string;
   country: string;
   language: string;
-  tags: string[];
+  categories: string[];
   complexity: number;
 }
 

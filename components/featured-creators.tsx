@@ -1,8 +1,9 @@
-import { channelsData } from "@/lib/data";
+import { getCreators } from "@/lib/data";
 import { CreatorGrid } from "@/components/creator-grid";
 
-export function FeaturedCreators() {
-  const featuredCreators = channelsData.slice(0, 3);
+export async function FeaturedCreators() {
+  const creators = await getCreators();
+  const featuredCreators = creators.slice(0, 3);
 
   return (
     <section>
