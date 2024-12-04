@@ -1,9 +1,7 @@
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { SearchButton } from "@/components/search-button";
 
 export default function Home() {
   return (
@@ -23,12 +21,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
             <SearchCreators />
-            <Button asChild size="lg" className="w-full sm:w-auto group">
-              <Link href="/categories">
-                Browse Categories
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+            {/* <SearchButton /> */}
           </div>
         </div>
 
