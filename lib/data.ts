@@ -14,6 +14,8 @@ export const categories: Category[] = [
   { name: 'Mobile', slug: 'mobile' },
 ];
 
+export const channelsData: Creator[] = [];
+
 export async function getCreators(): Promise<Creator[]> {
   const { data, error } = await supabase
     .from('profiles')
