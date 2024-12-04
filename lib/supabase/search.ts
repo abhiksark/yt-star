@@ -19,7 +19,7 @@ export async function searchCreators(query: string): Promise<{ data: Creator[] |
       const filteredCreators = channelsData.filter(creator => 
         creator.name.toLowerCase().includes(query.toLowerCase()) ||
         creator.description.toLowerCase().includes(query.toLowerCase()) ||
-        creator.category.some(cat => cat.toLowerCase().includes(query.toLowerCase()))
+        creator.categories.some(cat => cat.toLowerCase().includes(query.toLowerCase()))
       );
       return { data: filteredCreators, error: null };
     }
