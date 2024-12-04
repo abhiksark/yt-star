@@ -18,7 +18,7 @@ export const signUpSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export const signInSchema = z.object({
+const signInSchema = z.object({
   email: z.string()
     .email("Please enter a valid email address"),
   password: z.string()
@@ -26,4 +26,4 @@ export const signInSchema = z.object({
 });
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
-export type SignInFormData = z.infer<typeof signInSchema>;
+type SignInFormData = z.infer<typeof signInSchema>;
