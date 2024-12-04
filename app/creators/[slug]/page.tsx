@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { StarRating } from "@/components/star-rating";
 import { getCreators, getCreatorBySlug } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -14,8 +15,11 @@ import {
   Eye, 
   BarChart2,
   Globe2,
-  Languages
+  Languages,
+  Link as LinkIcon,
+  Youtube
 } from "lucide-react";
+import Link from "next/link";
 import type { Creator } from "@/lib/types";
 
 interface CreatorPageProps {
@@ -69,74 +73,106 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
         </AlertDescription>
       </Alert>
 
-      <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
-        <div className="space-y-4">
-          <Avatar className="w-24 h-24">
-            <img src={creator.logoUrl || ''} alt={creator.name} />
-          </Avatar>
-          <div>
-            <h1 className="text-3xl font-bold">{creator.name}</h1>
-            <p className="text-muted-foreground">{creator.categories[0]}</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {creator.categories.map((category) => (
-              <Badge key={category} variant="secondary">
-                {category}
-              </Badge>
-            ))}
-          </div>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Globe2 className="h-4 w-4" />
-              <span>{creator.country}</span>
+      <div className="space-y-6">
+        <div className="flex flex-wrap gap-2">
+          <span className="text-sm font-medium text-muted-foreground mr-2">Topics:</span>
+          {creator.categories.map((category) => (
+            <Badge
+              key={category}
+              variant="secondary"
+              className="hover:bg-secondary/80"
+            >
+              {category}
+            </Badge>
+          ))}
+        </div>
+
+        <div className="relative bg-gradient-to-b from-muted/50 to-background rounded-xl p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row gap-6 items-start">
+            <div className="relative">
+              <Avatar className="w-24 h-24 ring-2 ring-border">
+                <img src={creator.logoUrl || ''} alt={creator.name} className="object-cover" />
+              </Avatar>
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-background px-2 py-1 rounded-full border shadow-sm">
+                <StarRating rating={creator.rating || 0} className="scale-90" />
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Languages className="h-4 w-4" />
-              <span>{creator.language}</span>
+            <div className="space-y-4 flex-1">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{creator.name}</h1>
+                <p className="text-lg text-muted-foreground leading-relaxed">{creator.description}</p>
+              </div>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <div className="flex items-center gap-1">
+                  <Globe2 className="h-4 w-4" />
+                  <span>{creator.country}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Languages className="h-4 w-4" />
+                  <span>{creator.language}</span>
+                </div>
+              </div>
+              {/* <div className="flex flex-wrap gap-4 mt-4">
+                <div className="flex items-center gap-1">
+                  <Youtube className="h-4 w-4" />
+                  <Link href="#" className="text-primary hover:text-primary/80 font-medium">
+                    View Channel
+                  </Link>
+                </div>
+                <div className="flex items-center gap-1">
+                  <LinkIcon className="h-4 w-4" />
+                  <Link href="#" className="text-primary hover:text-primary/80 font-medium">
+                    Website
+                  </Link>
+                </div>
+              </div> */}
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <Card className="p-4">
-              <div className="flex flex-col items-center gap-2">
-                <Users className="h-5 w-5 text-muted-foreground" />
-                <p className="text-sm font-medium">Subscribers</p>
-                <p className="text-2xl font-bold">{creator.subscriberCount}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <Users className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-bold mb-1">{creator.subscriberCount}</p>
+                <p className="text-sm text-muted-foreground">Subscribers</p>
               </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex flex-col items-center gap-2">
-                <PlaySquare className="h-5 w-5 text-muted-foreground" />
-                <p className="text-sm font-medium">Videos</p>
-                <p className="text-2xl font-bold">{creator.videoCount}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <PlaySquare className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-bold mb-1">{creator.videoCount}</p>
+                <p className="text-sm text-muted-foreground">Videos</p>
               </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex flex-col items-center gap-2">
-                <Eye className="h-5 w-5 text-muted-foreground" />
-                <p className="text-sm font-medium">Views</p>
-                <p className="text-2xl font-bold">{creator.views}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <p className="text-2xl font-bold mb-1">{creator.views}</p>
+                <p className="text-sm text-muted-foreground">Views</p>
               </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex flex-col items-center gap-2">
-                <BarChart2 className="h-5 w-5 text-muted-foreground" />
-                <p className="text-sm font-medium">Complexity</p>
-                <div className="flex gap-1">
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <BarChart2 className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <div className="flex justify-center gap-1 mb-1">
                   {Array.from({ length: creator.complexity }).map((_, i) => (
                     <span key={i} className="w-2 h-2 bg-primary rounded-full" />
                   ))}
                 </div>
+                <p className="text-sm text-muted-foreground">Content Level</p>
               </div>
-            </Card>
-          </div>
-
-          <Card className="p-6">
-            <p className="text-lg">{creator.description}</p>
+            </CardContent>
           </Card>
         </div>
+
       </div>
 
       <Tabs defaultValue="videos" className="w-full">
