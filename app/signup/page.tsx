@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { SignUpForm } from "@/components/auth/sign-up-form";
 import { AuthFooter } from "@/components/auth/auth-footer";
 import { Shell } from "@/components/shell";
+import { Icons } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Sign Up - Create Your Account",
@@ -23,15 +24,15 @@ export default function SignUpPage() {
         </div>
         <div className="grid gap-4 text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Icons.check className="h-5 w-5 text-primary" />
+            <Icons.Check className="h-5 w-5 text-primary" />
             <span>Access to exclusive content</span>
           </div>
           <div className="flex items-center gap-2">
-            <Icons.check className="h-5 w-5 text-primary" />
+            <Icons.Check className="h-5 w-5 text-primary" />
             <span>Personalized recommendations</span>
           </div>
           <div className="flex items-center gap-2">
-            <Icons.check className="h-5 w-5 text-primary" />
+            <Icons.Check className="h-5 w-5 text-primary" />
             <span>Join a thriving community</span>
           </div>
         </div>

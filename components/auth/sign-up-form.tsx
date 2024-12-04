@@ -19,14 +19,12 @@ import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { AuthProviders } from "@/components/auth/auth-providers";
 import { PasswordRequirements } from "@/components/auth/password-requirements";
-import { useToast } from "@/components/ui/use-toast";
 
 interface SignUpFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState("");
-  const { toast } = useToast();
 
   const passwordRequirements = [
     {
@@ -67,16 +65,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(values);
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email to verify your account.",
-      });
+      alert("Account created successfully! Please check your email to verify your account.");
     } catch (error) {
-      toast({
-        title: "Error creating account",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
+      alert("Error creating account. Please try again later.");
     } finally {
       setIsLoading(false);
     }

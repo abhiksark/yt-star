@@ -1,8 +1,9 @@
-import { LucideProps, Loader2, LogIn } from "lucide-react";
+import { LucideProps, Loader2, LogIn, Check } from "lucide-react";
 
 export const Icons = {
   spinner: Loader2,
   login: LogIn,
+  Check: Check,  // Add this line
   gitHub: ({ className, ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
