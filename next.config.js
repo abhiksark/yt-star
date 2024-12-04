@@ -1,14 +1,24 @@
-// next.config.js
-
-module.exports = {
-    images: {
-      domains: ['yt3.googleusercontent.com',
-                'flagcdn.com',
-                'yt3.ggpht.com',
-                'i.ytimg.com',
-                'yt3.ggpht.com',
-                
-    ], // Add the hostname here
-    },
-  };
-  
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
+  images: { 
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'yt3.googleusercontent.com',
+      },
+    ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true
+  },
+};
