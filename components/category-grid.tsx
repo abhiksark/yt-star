@@ -22,8 +22,8 @@ export function CategoryGrid({ categories, creators }: CategoryGridProps) {
 
   useEffect(() => {
     const filtered = creators.filter(
-      creator => creator.category.some(cat => 
-        cat.toLowerCase().includes(selectedCategory.toLowerCase())
+      creator => creator.categories.some(category => 
+        category.toLowerCase().includes(selectedCategory.toLowerCase())
       )
     );
     setFilteredCreators(filtered);

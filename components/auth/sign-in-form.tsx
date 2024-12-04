@@ -4,7 +4,6 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
-import { AuthProviders } from "@/components/auth/auth-providers";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,6 +41,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+
     setTimeout(() => {
       setIsLoading(false);
       console.log(values);
@@ -88,11 +87,6 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
               </FormItem>
             )}
           />
-          <div className="flex items-center justify-end">
-            <Button variant="link" className="px-0 font-normal">
-              Forgot password?
-            </Button>
-          </div>
           <Button className="w-full rounded-xl" type="submit" disabled={isLoading}>
             {isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -103,16 +97,26 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
           </Button>
         </form>
       </Form>
-      <AuthProviders isLoading={isLoading} />
-      <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
-        <Link 
-          href="/signup" 
-          className="font-medium text-primary hover:underline"
-        >
-          Sign up
-        </Link>
-      </p>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <Button variant="outline" disabled={isLoading} className="rounded-xl">
+          <Icons.gitHub className="mr-2 h-4 w-4" />
+          GitHub
+        </Button>
+        <Button variant="outline" disabled={isLoading} className="rounded-xl">
+          <Icons.google className="mr-2 h-4 w-4" />
+          Google
+        </Button>
+      </div>
     </div>
   );
 }

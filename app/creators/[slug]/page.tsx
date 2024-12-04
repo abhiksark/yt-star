@@ -3,12 +3,10 @@ import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { channelsData } from "@/lib/data";
+import { getCreators, getCreatorBySlug } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SimilarCreators } from "@/components/similar-creators";
-import { VideoGrid } from "@/components/video-grid";
-import { PlaylistGrid } from "@/components/playlist-grid";
 import { 
   AlertCircle, 
   Users, 
@@ -27,7 +25,7 @@ interface CreatorPageProps {
 }
 
 export async function generateMetadata({ params }: CreatorPageProps): Promise<Metadata> {
-  const creator = channelsData.find((c) => c.slug === params.slug);
+  const creator = await getCreatorBySlug(params.slug);
   
   if (!creator) {
     return {
@@ -47,16 +45,16 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
   };
 }
 
-export function generateStaticParams() {
-  return channelsData.map((creator) => {
-    return {
-      slug: creator.slug,
-    };
-  });
+export async function generateStaticParams() {
+  const creators = await getCreators();
+  return creators.map((creator) => ({
+    slug: creator.slug,
+  }));
 }
 
-export default function CreatorProfile({ params }: CreatorPageProps) {
-  const creator = channelsData.find((c) => c.slug === params.slug);
+export default async function CreatorProfile({ params }: CreatorPageProps) {
+  const creator = await getCreatorBySlug(params.slug);
+  const allCreators = await getCreators();
 
   if (!creator) {
     notFound();
@@ -74,16 +72,16 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
       <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
         <div className="space-y-4">
           <Avatar className="w-24 h-24">
-            <img src={creator.logoUrl} alt={creator.name} />
+            <img src={creator.logoUrl || ''} alt={creator.name} />
           </Avatar>
           <div>
             <h1 className="text-3xl font-bold">{creator.name}</h1>
-            <p className="text-muted-foreground">{creator.category.join(', ')}</p>
+            <p className="text-muted-foreground">{creator.categories[0]}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {creator.category.map((tag) => (
-              <Badge key={tag} variant="secondary">
-                {tag}
+            {creator.categories.map((category) => (
+              <Badge key={category} variant="secondary">
+                {category}
               </Badge>
             ))}
           </div>
@@ -147,14 +145,18 @@ export default function CreatorProfile({ params }: CreatorPageProps) {
           <TabsTrigger value="playlists">Playlists</TabsTrigger>
         </TabsList>
         <TabsContent value="videos">
-          <VideoGrid videos={creator.videoList} />
+          <div className="text-center py-8 text-muted-foreground">
+            Coming soon: Recent videos from {creator.name}
+          </div>
         </TabsContent>
         <TabsContent value="playlists">
-          <PlaylistGrid playlists={creator.playList} />
+          <div className="text-center py-8 text-muted-foreground">
+            Coming soon: Popular playlists from {creator.name}
+          </div>
         </TabsContent>
       </Tabs>
 
-      <SimilarCreators currentCreator={creator} allCreators={channelsData} />
+      <SimilarCreators currentCreator={creator} allCreators={allCreators} />
     </div>
   );
 }
