@@ -12,6 +12,10 @@ import {
   Cloud,
   Shield,
   Smartphone,
+  Coffee,
+  CircuitBoard,
+  TreePine,
+  Settings,
 } from "lucide-react";
 
 const categoryIcons = {
@@ -25,6 +29,12 @@ const categoryIcons = {
   'cloud': Cloud,
   'security': Shield,
   'mobile': Smartphone,
+  'python': TreePine,
+  'java': Coffee,
+  'os': Settings,
+  'dsa': TreePine,
+  'computer-architecture': CircuitBoard,
+
 };
 
 export function Categories() {

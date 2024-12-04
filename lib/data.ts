@@ -12,6 +12,11 @@ export const categories: Category[] = [
   { name: 'Cloud', slug: 'cloud' },
   { name: 'Security', slug: 'security' },
   { name: 'Mobile', slug: 'mobile' },
+  { name: 'Python', slug: 'python' },
+  { name: 'Java', slug: 'java' },
+  { name: 'Operating Systems', slug: 'os' },
+  { name: 'DSA', slug: 'dsa' },
+  { name: 'Computer Architecture', slug: 'computer-architecture' },
 ];
 
 export const channelsData: Creator[] = [];
