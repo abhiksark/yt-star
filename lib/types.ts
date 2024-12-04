@@ -18,7 +18,7 @@ export interface Category {
   slug: string;
 }
 
-export interface Job {
+interface Job {
   id: number;
   title: string;
   department: string;
