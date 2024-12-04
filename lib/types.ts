@@ -9,19 +9,7 @@ export interface Creator {
   views: string;
   country: string;
   language: string;
-  category: string[];
-  playList?: Array<{
-    playlistId: string;
-    title: string;
-    thumbnailUrl: string;
-  }>;
-  videoList: Array<{
-    _id: string;
-    title: string;
-    views?: string;
-    uploadDate?: string;
-    duration?: string;
-  }>;
+  categories: string[];
   complexity: number;
 }
 
