@@ -112,7 +112,7 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
                   <span>{creator.language}</span>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-4 mt-4">
+              {/* <div className="flex flex-wrap gap-4 mt-4">
                 <div className="flex items-center gap-1">
                   <Youtube className="h-4 w-4" />
                   <Link href="#" className="text-primary hover:text-primary/80 font-medium">
@@ -125,7 +125,7 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
                     Website
                   </Link>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
