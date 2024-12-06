@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
-import { SearchButton } from "@/components/search-button";
 
 export const metadata: Metadata = {
   title: "Tech Content Creators - Discover Top Programming & Tech YouTubers",
@@ -48,9 +47,9 @@ export const metadata: Metadata = {
   applicationName: 'Tech Content Creators',
   publisher: 'Tech Content Creators',
   metadataBase: new URL('https://bestyoutubechannels.com'),
-  // verification: {
-  //   google: 'google-site-verification-code',
-  // },
+  verification: {
+    google: 'G-WMGS1CWHZB',
+  },
 };
 
 export default function Home() {

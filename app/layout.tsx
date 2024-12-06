@@ -44,13 +44,13 @@ export const metadata: Metadata = {
     description: 'Find the best tech education content creators on YouTube',
     siteName: 'BestYoutubeChannels',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'BestYoutubeChannels - Tech Education Discovery',
-    description: 'Find the best tech education content creators on YouTube',
-    creator: '@bestyoutubechannels',
-    site: '@bestyoutubechannels',
-  },
+  // twitter: {
+  //   card: 'summary_large_image',
+  //   title: 'BestYoutubeChannels - Tech Education Discovery',
+  //   description: 'Find the best tech education content creators on YouTube',
+  //   creator: '@bestyoutubechannels',
+  //   site: '@bestyoutubechannels',
+  // },
   alternates: {
     canonical: 'https://bestyoutubechannels.com',
     languages: {

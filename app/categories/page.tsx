@@ -55,6 +55,9 @@ export const metadata: Metadata = {
       'en-US': '/categories',
     },
   },
+  verification: {
+    google: 'G-WMGS1CWHZB ',
+  },
   authors: [{ name: 'Tech Content Creators' }],
   generator: 'Next.js',
   applicationName: 'Tech Content Creators',
@@ -66,7 +69,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://your-domain.com'),
+  metadataBase: new URL('https://bestyoutubechannels.com'),
   other: {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black',
