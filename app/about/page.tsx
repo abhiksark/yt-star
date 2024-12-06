@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mail, Github, Twitter, ArrowRight } from "lucide-react";
+import { Mail, Github as GithubIcon, X as TwitterIcon, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -136,12 +136,12 @@ export default function AboutPage() {
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon" asChild>
                     <a href={member.social.twitter} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="h-4 w-4" />
+                      <TwitterIcon className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button variant="ghost" size="icon" asChild>
                     <a href={member.social.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="h-4 w-4" />
+                      <GithubIcon className="h-4 w-4" />
                     </a>
                   </Button>
                 </div>
