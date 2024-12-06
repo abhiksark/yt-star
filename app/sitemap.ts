@@ -116,31 +116,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Creator content pages (videos, playlists)
-  const creatorContentPages = creators.flatMap((creator) => [
-    {
-      url: `${baseUrl}/creators/${creator.slug}/videos`,
-      lastModified: currentDate,
-      changeFrequency: 'daily' as const,
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/creators/${creator.slug}/playlists`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    },
-  ]);
+  // // Creator content pages (videos, playlists)
+  // const creatorContentPages = creators.flatMap((creator) => [
+  //   {
+  //     url: `${baseUrl}/creators/${creator.slug}/videos`,
+  //     lastModified: currentDate,
+  //     changeFrequency: 'daily' as const,
+  //     priority: 0.6,
+  //   },
+  //   {
+  //     url: `${baseUrl}/creators/${creator.slug}/playlists`,
+  //     lastModified: currentDate,
+  //     changeFrequency: 'weekly' as const,
+  //     priority: 0.6,
+  //   },
+  // ]);
 
-  // Category-Creator combination pages
-  const categoryCreatorPages = creators.flatMap((creator) =>
-    creator.categories.map((category) => ({
-      url: `${baseUrl}/categories/${category.toLowerCase()}/creators/${creator.slug}`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.5,
-    }))
-  );
+  // // Category-Creator combination pages
+  // const categoryCreatorPages = creators.flatMap((creator) =>
+  //   creator.categories.map((category) => ({
+  //     url: `${baseUrl}/categories/${category.toLowerCase()}/creators/${creator.slug}`,
+  //     lastModified: currentDate,
+  //     changeFrequency: 'weekly' as const,
+  //     priority: 0.5,
+  //   }))
+  // );
 
   // Blog posts
   const blogPosts = getAllPosts().map((post) => ({
@@ -155,8 +155,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...secondaryPages,
     ...categoryPages,
     ...creatorPages,
-    ...creatorContentPages,
-    ...categoryCreatorPages,
+    // ...creatorContentPages,
+    // ...categoryCreatorPages,
     ...authPages,
     ...blogPosts,
     ...legalPages,
