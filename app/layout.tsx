@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,7 +67,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className={cn(inter.className)} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
