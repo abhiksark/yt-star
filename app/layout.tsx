@@ -66,7 +66,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body className={cn(inter.className)} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
