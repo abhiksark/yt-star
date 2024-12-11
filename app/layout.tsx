@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bestyoutubechannels.com'),
+  metadataBase: new URL('https://www.bestyoutubechannels.com'),
   title: {
     default: "BestYoutubeChannels - Discover Top Tech Content Creators",
     template: "%s | BestYoutubeChannels"
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://bestyoutubechannels.com',
+    url: 'https://www.bestyoutubechannels.com',
     title: 'BestYoutubeChannels - Discover Top Tech Content Creators',
     description: 'Find the best tech education content creators on YouTube',
     siteName: 'BestYoutubeChannels',
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     site: '@bestyoutubechannels',
   },
   alternates: {
-    canonical: 'https://bestyoutubechannels.com',
+    canonical: 'https://www.bestyoutubechannels.com',
     languages: {
-      'en-US': 'https://bestyoutubechannels.com',
+      'en-US': 'https://www.bestyoutubechannels.com',
     },
   },
 };
