@@ -1,3 +1,5 @@
+// /app/creators/[slug]/page.tsx
+
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
@@ -45,6 +47,9 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
       title: `${creator.name} - Tech Content Creator`,
       description: creator.description,
       images: [{ url: creator.logoUrl, width: 176, height: 176, alt: creator.name }],
+    },
+    alternates: {
+      canonical: `/creators/${params.slug}`,
     },
   };
 }
