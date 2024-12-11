@@ -11,33 +11,13 @@ export const metadata: Metadata = {
 
 const team = [
   {
-    name: "Alex Chen",
-    role: "Founder & CEO",
-    bio: "Former software engineer turned entrepreneur, passionate about making tech education accessible.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+    name: "Abhik Sarkar",
+    role: "Creator",
+    bio: "Software Engineer, passionate about making tech education accessible.",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQFbOq7l6CLRsg/profile-displayphoto-shrink_400_400/B4DZONMrAuHoAk-/0/1733240730408?e=1739404800&v=beta&t=JWBx5FAzmAJCgP9yvkK9Wr8z5reLMu-CsuCqEKaHp08",
     social: {
-      twitter: "#",
-      github: "#",
-    },
-  },
-  {
-    name: "Sarah Johnson",
-    role: "Content Director",
-    bio: "Tech content strategist with 8+ years of experience in educational content curation.",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    social: {
-      twitter: "#",
-      github: "#",
-    },
-  },
-  {
-    name: "Michael Park",
-    role: "Technical Lead",
-    bio: "Full-stack developer focused on creating seamless user experiences.",
-    image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop",
-    social: {
-      twitter: "#",
-      github: "#",
+      twitter: "https://x.com/abhiksarkar",
+      github: "https://github.com/abhiksarkar",
     },
   },
 ];
@@ -94,7 +74,7 @@ export default function AboutPage() {
                   <p className="text-sm text-muted-foreground">Monthly Users</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold">200+</p>
+                  <p className="text-3xl font-bold">30+</p>
                   <p className="text-sm text-muted-foreground">Tech Topics</p>
                 </div>
                 <div>
@@ -116,7 +96,7 @@ export default function AboutPage() {
             make quality tech education more discoverable.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-items-center items-center">
           {team.map((member) => (
             <Card key={member.name} className="group overflow-hidden">
               <div className="aspect-square relative">
@@ -159,7 +139,7 @@ export default function AboutPage() {
         </p>
         <div className="flex justify-center gap-4 pt-4">
           <Button asChild>
-            <Link href="mailto:contact@bestyoutubechannels.com" className="group">
+            <Link href="mailto:abhik@shiptoscale.com" className="group">
               <Mail className="mr-2 h-4 w-4" />
               Contact Us
             </Link>

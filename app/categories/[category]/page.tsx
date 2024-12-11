@@ -43,6 +43,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       title: `Best ${category.name} YouTube Channels`,
       description: `Learn ${category.name} from ${filteredCreators.length} expert content creators`,
     },
+    alternates: {
+      canonical: `/categories/${params.category}`,
+    },
   };
 }
 
