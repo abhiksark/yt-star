@@ -1,7 +1,57 @@
+import { Metadata } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
 import { SearchButton } from "@/components/search-button";
+
+export const metadata: Metadata = {
+  title: "Tech Content Creators - Discover Top Programming & Tech YouTubers",
+  description: "Find the best tech content creators and programming YouTubers. Curated list of experts in software development, system design, web development, and more. Start learning from top tech educators today.",
+  keywords: "tech YouTubers, programming tutorials, coding education, tech content creators, software development, system design, web development, programming education, tech tutorials, software engineering, learn to code, developer content",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+  },
+  category: 'Technology',
+  openGraph: {
+    title: "Tech Content Creators - Discover Top Programming & Tech YouTubers",
+    description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development, system design, and web development.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Tech Content Creators",
+    url: 'https://bestyoutubechannels.com',
+  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Discover Top Tech Content Creators",
+  //   description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development.",
+  // },
+  alternates: {
+    canonical: "/",
+    languages: {
+      'en-US': '/',
+    },
+  },
+  authors: [{ name: 'Tech Content Creators' }],
+  generator: 'Next.js',
+  applicationName: 'Tech Content Creators',
+  publisher: 'Tech Content Creators',
+  metadataBase: new URL('https://bestyoutubechannels.com'),
+  // verification: {
+  //   google: 'google-site-verification-code',
+  // },
+};
 
 export default function Home() {
   return (
@@ -21,7 +71,6 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
             <SearchCreators />
-            {/* <SearchButton /> */}
           </div>
         </div>
 
