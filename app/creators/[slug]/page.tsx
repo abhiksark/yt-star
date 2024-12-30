@@ -40,17 +40,82 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
     };
   }
 
+  const baseUrl = 'https://bestyoutubechannels.com';
+  const url = `${baseUrl}/creators/${params.slug}`;
+
   return {
-    title: `${creator.name} - Tech Content Creator Profile`,
-    description: creator.description,
+    title: `${creator.name} - Tech Content Creator Profile | Best YouTube Channels`,
+    description: `Learn from ${creator.name}, a tech content creator with ${creator.subscriberCount} subscribers. Expert tutorials in ${creator.categories.join(', ')}. Watch ${creator.videoCount}+ educational videos.`,
+    
+    keywords: [
+      `${creator.name}`,
+      'tech tutorials',
+      'programming education',
+      'coding tutorials',
+      ...creator.categories,
+      'tech content creator',
+      'youtube educator',
+      'programming tutorials',
+    ],
+
+    authors: [{ name: creator.name }],
+    
     openGraph: {
       title: `${creator.name} - Tech Content Creator`,
       description: creator.description,
-      images: [{ url: creator.logoUrl, width: 176, height: 176, alt: creator.name }],
+      type: 'profile',
+      url,
+      images: [
+        {
+          url: creator.logoUrl,
+          width: 176,
+          height: 176,
+          alt: creator.name,
+        }
+      ],
+      locale: 'en_US',
+      siteName: 'BestYoutubeChannels',
     },
+
+    twitter: {
+      card: 'summary',
+      title: `${creator.name} - Tech Content Creator`,
+      description: `Learn ${creator.categories.join(', ')} from ${creator.name}`,
+      images: [creator.logoUrl],
+      creator: '@bestyoutubechannels',
+      site: '@bestyoutubechannels',
+    },
+
     alternates: {
-      canonical: `/creators/${params.slug}`,
+      canonical: url,
+      languages: {
+        'en-US': url,
+      },
     },
+
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+
+    // verification: {
+    //   google: 'your-google-verification-code',
+    //   yandex: 'your-yandex-verification-code',
+    //   bing: 'your-bing-verification-code',
+    // },
+
+    other: {
+      'apple-mobile-web-app-capable': 'yes',
+      'apple-mobile-web-app-status-bar-style': 'black',
+      'format-detection': 'telephone=no',
+    }
   };
 }
 

@@ -5,9 +5,28 @@ import { Categories } from "@/components/categories";
 import { SearchButton } from "@/components/search-button";
 
 export const metadata: Metadata = {
-  title: "Tech Content Creators - Discover Top Programming & Tech YouTubers",
-  description: "Find the best tech content creators and programming YouTubers. Curated list of experts in software development, system design, web development, and more. Start learning from top tech educators today.",
-  keywords: "tech YouTubers, programming tutorials, coding education, tech content creators, software development, system design, web development, programming education, tech tutorials, software engineering, learn to code, developer content",
+  title: {
+    default: "Tech Content Creators - Best Programming & Tech YouTube Channels 2024",
+    template: "%s | Tech Content Creators"
+  },
+  description: "Discover top tech YouTubers and programming content creators. Expert tutorials in software development, system design, web development, and coding education. Curated list of the best tech educators for 2024.",
+  keywords: [
+    "tech YouTubers",
+    "programming tutorials",
+    "coding education",
+    "tech content creators",
+    "software development tutorials",
+    "system design tutorials",
+    "web development courses",
+    "programming education",
+    "tech tutorials 2024",
+    "software engineering education",
+    "learn to code",
+    "developer content",
+    "best tech YouTube channels",
+    "programming learning resources",
+    "tech education platform"
+  ],
   robots: {
     index: true,
     follow: true,
@@ -22,35 +41,58 @@ export const metadata: Metadata = {
   viewport: {
     width: 'device-width',
     initialScale: 1,
+    maximumScale: 1,
   },
   category: 'Technology',
   openGraph: {
-    title: "Tech Content Creators - Discover Top Programming & Tech YouTubers",
-    description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development, system design, and web development.",
+    title: "Best Tech Content Creators & Programming YouTubers 2024",
+    description: "Find expert tech content creators and programming YouTubers. Learn software development, system design, and web development from industry experts.",
     type: "website",
     locale: "en_US",
     siteName: "Tech Content Creators",
     url: 'https://bestyoutubechannels.com',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Tech Content Creators Platform'
+      }
+    ]
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Discover Top Tech Content Creators",
-  //   description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development.",
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: "Discover Top Tech Content Creators 2024",
+    description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development.",
+    images: ["/twitter-image.png"],
+    creator: "@techcreators",
+    site: "@techcreatorsplatform"
+  },
   alternates: {
-    canonical: "/",
+    canonical: "https://bestyoutubechannels.com",
     languages: {
-      'en-US': '/',
+      'en-US': 'https://bestyoutubechannels.com',
     },
   },
-  authors: [{ name: 'Tech Content Creators' }],
+  authors: [{ name: 'Tech Content Creators Team' }],
   generator: 'Next.js',
   applicationName: 'Tech Content Creators',
-  publisher: 'Tech Content Creators',
+  publisher: 'Tech Content Creators Platform',
   metadataBase: new URL('https://bestyoutubechannels.com'),
   // verification: {
-  //   google: 'google-site-verification-code',
+  //   google: 'G-WXTHS67SQN',
+  //   yandex: 'yandex-verification-code',
+  //   bing: 'bing-verification-code'
   // },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black',
+    'format-detection': 'telephone=no',
+    'mobile-web-app-capable': 'yes',
+    'msapplication-TileColor': '#ffffff',
+    'msapplication-config': '/browserconfig.xml',
+    'theme-color': '#ffffff'
+  }
 };
 
 export default function Home() {
