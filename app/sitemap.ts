@@ -3,7 +3,7 @@ import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://bestyoutubechannels.com';
+  const baseUrl = 'https://www.bestyoutubechannels.com';
   const currentDate = new Date();
 
   // High-priority core pages
