@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Tech Content Creators",
-    url: 'https://bestyoutubechannels.com',
+    url: 'https://www.bestyoutubechannels.com',
     images: [
       {
         url: '/og-image.png',
@@ -69,16 +69,16 @@ export const metadata: Metadata = {
     site: "@techcreatorsplatform"
   },
   alternates: {
-    canonical: "https://bestyoutubechannels.com",
+    canonical: "https://www.bestyoutubechannels.com",
     languages: {
-      'en-US': 'https://bestyoutubechannels.com',
+      'en-US': 'https://www.bestyoutubechannels.com',
     },
   },
   authors: [{ name: 'Tech Content Creators Team' }],
   generator: 'Next.js',
   applicationName: 'Tech Content Creators',
   publisher: 'Tech Content Creators Platform',
-  metadataBase: new URL('https://bestyoutubechannels.com'),
+  metadataBase: new URL('https://www.bestyoutubechannels.com'),
   // verification: {
   //   google: 'G-WXTHS67SQN',
   //   yandex: 'yandex-verification-code',

@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
     };
   }
 
-  const baseUrl = 'https://bestyoutubechannels.com';
+  const baseUrl = 'https://wwww.bestyoutubechannels.com';
   const url = `${baseUrl}/creators/${params.slug}`;
 
   return {
