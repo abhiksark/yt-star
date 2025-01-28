@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import { getCanonicalUrl } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
