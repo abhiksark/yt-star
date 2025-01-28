@@ -43,6 +43,14 @@ export const metadata: Metadata = {
     title: 'BestYoutubeChannels - Discover Top Tech Content Creators',
     description: 'Find the best tech education content creators on YouTube',
     siteName: 'BestYoutubeChannels',
+    images: [
+      {
+        url: getCanonicalUrl('og/default.png'),
+        width: 1200,
+        height: 630,
+        alt: 'BestYoutubeChannels - Tech Education Discovery Platform',
+      }
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -50,6 +58,7 @@ export const metadata: Metadata = {
     description: 'Find the best tech education content creators on YouTube',
     creator: '@bestyoutubechannels',
     site: '@bestyoutubechannels',
+    images: [getCanonicalUrl('og/default.png')],
   },
   alternates: {
     canonical: 'https://www.bestyoutubechannels.com',
