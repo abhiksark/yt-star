@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      type: "article",
+    type: "article",
       publishedTime: post.date,
       authors: [post.author.name],
     },
