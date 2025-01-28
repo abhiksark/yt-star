@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://bestyoutubechannels.com';
+  const baseUrl = 'https://www.bestyoutubechannels.com';
 
   return {
     rules: {

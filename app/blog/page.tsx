@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: "Tech Education Content Creators Hub",
     description: "Find the best tech education content creators and tutorials",
     type: "website",
-    url: "https://bestyoutubechannels.com/blog",
+    url: "https://www.bestyoutubechannels.com/blog",
   },
 };
 
