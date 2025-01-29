@@ -2,121 +2,42 @@ import { MetadataRoute } from 'next';
 import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
 import { getCanonicalUrl } from '@/lib/utils';
+import { getCountryName, getCountrySlug, isValidCountryCode } from '@/lib/countries';
 import { getBaseUrl } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString();
-  const baseUrl = getBaseUrl();
 
-  // High-priority core pages
-  const primaryPages = [
-    {
-      route: '',
-      priority: 1.0,
-      changeFrequency: 'daily' as const,
-    },
-    {
-      route: 'categories',
-      priority: 0.9,
-      changeFrequency: 'daily' as const,
-    },
-    {
-      route: 'countries',
-      priority: 0.9,
-      changeFrequency: 'daily' as const,
-    },
-    {
-      route: 'blog',
-      priority: 0.9,
-      changeFrequency: 'daily' as const,
-    }
-  ].map((page) => ({
-    url: getCanonicalUrl(page.route),
+  // Core pages
+  const corePages = [
+    { path: '', priority: 1.0 },
+    { path: 'categories', priority: 0.9 },
+    { path: 'countries', priority: 0.9 },
+    { path: 'blog', priority: 0.9 },
+    { path: 'about', priority: 0.8 },
+    { path: 'contact', priority: 0.8 },
+    { path: 'terms', priority: 0.4 },
+    { path: 'privacy', priority: 0.4 },
+  ].map(page => ({
+    url: getCanonicalUrl(page.path),
     lastModified: currentDate,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
-
-  // Secondary navigation pages
-  const secondaryPages = [
-    {
-      route: 'about',
-      priority: 0.8,
-      changeFrequency: 'weekly' as const,
-    },
-    {
-      route: 'contact',
-      priority: 0.8,
-      changeFrequency: 'weekly' as const,
-    },
-    {
-      route: 'careers',
-      priority: 0.7,
-      changeFrequency: 'weekly' as const,
-    },
-  ].map((page) => ({
-    url: getCanonicalUrl(page.route),
-    lastModified: currentDate,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
-
-  // Authentication and profile pages (no-index in robots.txt)
-  const authPages = [
-    {
-      route: 'signin',
-      priority: 0.6,
-      changeFrequency: 'monthly' as const,
-    },
-    {
-      route: 'signup',
-      priority: 0.6,
-      changeFrequency: 'monthly' as const,
-    },
-    {
-      route: 'profile',
-      priority: 0.6,
-      changeFrequency: 'monthly' as const,
-    },
-  ].map((page) => ({
-    url: getCanonicalUrl(page.route),
-    lastModified: currentDate,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
-
-  // Legal and policy pages
-  const legalPages = [
-    {
-      route: 'terms',
-      priority: 0.4,
-      changeFrequency: 'monthly' as const,
-    },
-    {
-      route: 'privacy',
-      priority: 0.4,
-      changeFrequency: 'monthly' as const,
-    },
-  ].map((page) => ({
-    url: getCanonicalUrl(page.route),
-    lastModified: currentDate,
-    changeFrequency: page.changeFrequency,
+    changeFrequency: 'daily' as const,
     priority: page.priority,
   }));
 
   // Category pages
-  const categoryPages = categories.map((category) => ({
+  const categoryPages = categories.map(category => ({
     url: getCanonicalUrl(`categories/${category.slug}`),
     lastModified: currentDate,
     changeFrequency: 'daily' as const,
     priority: 0.8,
   }));
 
-  // Fetch creators dynamically
+  // Fetch creators
   const creators = await getCreators();
 
-  // Creator profile pages
-  const creatorPages = creators.map((creator) => ({
+  // Creator pages
+  const creatorPages = creators.map(creator => ({
     url: getCanonicalUrl(`creators/${creator.slug}`),
     lastModified: currentDate,
     changeFrequency: 'daily' as const,
@@ -124,43 +45,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Country pages
-  const countryPages = creators
-    .map(creator => creator.country)
-    .filter((country, index, self) => country && self.indexOf(country) === index)
-    .map(country => ({
-      url: getCanonicalUrl(`countries/${country.toLowerCase()}`),
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }));
+  const countryPages = Array.from(
+    new Set(
+      creators
+        .filter(creator => creator.country && isValidCountryCode(creator.country))
+        .map(creator => creator.country.toUpperCase())
+    )
+  ).map(countryCode => ({
+    url: getCanonicalUrl(`countries/${getCountrySlug(countryCode)}`),
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+    alternateRefs: [{
+      href: getCanonicalUrl(`countries/${getCountrySlug(countryCode)}`),
+      hreflang: 'en'
+    }]
+  }));
 
   // Blog posts
-  const blogPosts = getAllPosts().map((post) => ({
+  const blogPages = getAllPosts().map(post => ({
     url: getCanonicalUrl(`blog/${post.slug}`),
     lastModified: new Date(post.date).toISOString(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
-    alternateRefs: [
-      {
-        href: getCanonicalUrl(`blog/${post.slug}`),
-        hreflang: 'en-US'
-      }
-    ]
+    alternateRefs: [{
+      href: getCanonicalUrl(`blog/${post.slug}`),
+      hreflang: 'en'
+    }]
   }));
 
-  // Combine all URLs and remove duplicates
+  // Combine all URLs
   const allUrls = [
-    ...primaryPages,
-    ...secondaryPages,
+    ...corePages,
     ...categoryPages,
     ...creatorPages,
     ...countryPages,
-    ...blogPosts,
-    ...legalPages,
-    // Exclude auth pages from sitemap since they should be no-indexed
+    ...blogPages,
   ];
 
-  // Remove duplicate URLs (keeping the one with higher priority)
+  // Remove duplicates and sort by priority
   const uniqueUrls = Array.from(
     new Map(
       allUrls

@@ -20,8 +20,8 @@ function getBaseUrl(): string {
 
 export function getCanonicalUrl(path: string = ''): string {
   const baseUrl = getBaseUrl();
-  // Remove leading and trailing slashes, then join with base URL
-  const cleanPath = path.replace(/^\/+|\/+$/g, '');
+  // Remove leading/trailing slashes and normalize multiple slashes
+  const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
   return cleanPath ? `${baseUrl}/${cleanPath}` : baseUrl;
 }
 

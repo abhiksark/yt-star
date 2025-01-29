@@ -45,17 +45,13 @@ export function getCountryName(code: string): string {
 export function getCountrySlug(code: string): string {
   if (!code) return 'unknown';
   const normalizedCode = code.toUpperCase().trim();
-  const name = countryNames[normalizedCode] || code;
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return normalizedCode.toLowerCase();
 }
 
 export function getCountryFromSlug(slug: string): string | undefined {
   if (!slug) return undefined;
   const normalizedSlug = slug.toLowerCase().trim();
-  const entry = Object.entries(countryNames).find(
-    ([code, name]) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === normalizedSlug
-  );
-  return entry ? entry[0] : undefined;
+  return isValidCountryCode(normalizedSlug) ? normalizedSlug.toUpperCase() : undefined;
 }
 
 export function isValidCountryCode(code: string): boolean {

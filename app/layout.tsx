@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com'),
   title: {
     default: "Best Tech YouTube Channels 2025 - Programming & Development Tutorials",
-    template: "%s | Best Tech YouTube Channels 2025"
+    template: "%s | BestYoutubeChannels"
   },
   description: "Find the best tech YouTube channels for programming tutorials, system design, and software development. Expert-curated list of educational content creators for 2025.",
   keywords: [
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: getCanonicalUrl(),
     languages: {
-      'en-US': getCanonicalUrl(),
+      'en': getCanonicalUrl(),
     },
   },
   robots: {
@@ -92,7 +92,7 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
-    // bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
+    bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
   },
   other: {
     'apple-mobile-web-app-capable': 'yes',

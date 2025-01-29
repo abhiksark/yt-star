@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Define canonical redirects as a constant to avoid duplicate definitions
-const CANONICAL_REDIRECTS: ReadonlyMap<string, string> = new Map([
+// URLs that should redirect to their canonical versions
+const CANONICAL_REDIRECTS = new Map([
   ['/index', '/'],
   ['/index.html', '/'],
   ['/home', '/'],
@@ -15,7 +15,7 @@ const CANONICAL_REDIRECTS: ReadonlyMap<string, string> = new Map([
 ]);
 
 // URLs that should be excluded from trailing slash normalization
-const EXCLUDE_TRAILING_SLASH_NORM: readonly string[] = [
+const EXCLUDE_TRAILING_SLASH_NORM = [
   '/_next',
   '/api',
   '/static',
@@ -25,9 +25,21 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const currentPath = url.pathname;
 
+  // Normalize multiple slashes in URL
+  if (currentPath.includes('//')) {
+    url.pathname = currentPath.replace(/\/+/g, '/');
+    return NextResponse.redirect(url, 301);
+  }
+
   // Check if path should be excluded from processing
   if (EXCLUDE_TRAILING_SLASH_NORM.some(prefix => currentPath.startsWith(prefix))) {
     return NextResponse.next();
+  }
+
+  // Handle index.html and trailing index
+  if (currentPath.endsWith('index.html') || currentPath.endsWith('/index')) {
+    url.pathname = currentPath.replace(/(\/index)?\.html$|\/index$/, '');
+    return NextResponse.redirect(url, 301);
   }
 
   // Handle canonical redirects
@@ -52,6 +64,12 @@ export function middleware(request: NextRequest) {
   // Handle common misspellings and redirects
   if (currentPath.includes('youtube') && !currentPath.includes('youtubechannels')) {
     url.pathname = currentPath.replace('youtube', 'youtubechannels');
+    return NextResponse.redirect(url, 301);
+  }
+
+  // Handle www subdomain
+  if (request.headers.get('host')?.startsWith('www.')) {
+    url.host = url.host.replace(/^www\./, '');
     return NextResponse.redirect(url, 301);
   }
 

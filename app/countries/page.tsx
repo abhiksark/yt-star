@@ -19,6 +19,9 @@ const url = getCanonicalUrl('countries');
 export const metadata: Metadata = {
   title,
   description,
+  alternates: {
+    canonical: url,
+  },
   keywords: [
     "tech content creators",
     "programming tutorials",
