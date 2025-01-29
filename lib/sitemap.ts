@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
 import { getCanonicalUrl } from '@/lib/utils';
+import { getCountryName, getCountrySlug, isValidCountryCode } from '@/lib/countries';
 
 // Centralize URL normalization
 function normalizeUrl(url: string): string {
@@ -81,6 +82,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic creator pages
   const creators = await getCreators();
+  
+  // Get unique countries and generate country pages with full names
+  const countries = Array.from(
+    new Set(
+      creators
+        .filter(creator => creator.country && isValidCountryCode(creator.country))
+        .map(creator => creator.country.toUpperCase())
+    )
+  );
+
+  const countryUrls = countries.map(countryCode => {
+    const countryName = getCountryName(countryCode);
+    const countrySlug = getCountrySlug(countryCode);
+    return {
+      url: normalizeUrl(`${baseUrl}/countries/${countrySlug}`),
+      lastModified: currentDate,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+      // Add additional metadata for better SEO
+      alternateNames: [countryName],
+    };
+  });
+
   const creatorUrls = creators.map((creator) => ({
     url: normalizeUrl(`${baseUrl}/creators/${creator.slug}`),
     lastModified: currentDate,
@@ -101,6 +125,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allUrls = [
     ...coreRoutes,
     ...categoryUrls,
+    ...countryUrls,
     ...creatorUrls,
     ...blogUrls,
   ].filter((route) => isValidUrl(route.url));

@@ -37,16 +37,20 @@ export function generateSEOMetadata({
 }) {
   const url = getCanonicalUrl(path);
   const imageUrl = getCanonicalUrl(image);
+  const formattedTitle = title.length > 60 ? `${title.slice(0, 57)}...` : title;
+  const formattedDesc = description.length > 160 ? `${description.slice(0, 157)}...` : description;
 
   return {
-    title: `${title} | BestYoutubeChannels`,
-    description,
+    title: `${formattedTitle} | Best Tech Education Platform`,
+    description: formattedDesc,
     keywords: [
       ...keywords,
       'tech education',
       'programming tutorials',
       'coding tutorials',
       'tech content creators',
+      'learn programming',
+      'software development tutorials',
     ],
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com'),
     alternates: {

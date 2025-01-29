@@ -16,7 +16,11 @@ export function CreatorGrid({ creators }: CreatorGridProps) {
           <Card className="group h-full p-4 sm:p-6 hover:shadow-lg transition-all hover:-translate-y-1 hover:bg-accent/5">
             <div className="flex items-start gap-3 sm:gap-4">
               <Avatar className="h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-                <img src={creator.logoUrl} alt={creator.name} />
+                <img 
+                  src={creator.logoUrl} 
+                  alt={`${creator.name} - ${creator.categories.join(', ')} Content Creator`}
+                  loading="lazy"
+                />
               </Avatar>
               <div>
                 <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">

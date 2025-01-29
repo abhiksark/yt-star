@@ -3,11 +3,17 @@ import { Creator } from "@/lib/types";
 export function generateCreatorSchema(creator: Creator) {
   return {
     "@context": "https://schema.org",
-    "@type": "Person",
+    "@type": ["Person", "ProfessionalService"],
     "name": creator.name,
     "description": creator.description,
+    "url": `https://www.bestyoutubechannels.com/creators/${creator.slug}`,
+    "image": creator.logoUrl,
     "nationality": creator.country,
     "knowsLanguage": creator.language,
+    "teaches": creator.categories,
+    "sameAs": [
+      `https://youtube.com/c/${creator.slug}`,
+    ],
     "interactionStatistic": [
       {
         "@type": "InteractionCounter",
@@ -51,5 +57,20 @@ export function generateWebsiteSchema() {
       },
       "query-input": "required name=search_term_string"
     }
+  };
+}
+
+export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
   };
 }

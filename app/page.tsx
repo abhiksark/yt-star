@@ -2,6 +2,8 @@ import { Metadata, Viewport } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
+import { FAQSection } from "@/components/faq-section";
+import { platformFAQs, generatePlatformFAQSchema } from "@/lib/faq";
 import { SearchButton } from "@/components/search-button";
 
 export const viewport: Viewport = {
@@ -120,7 +122,18 @@ export default function Home() {
       <div className="container px-4 space-y-12 sm:space-y-16">
         <Categories />
         <FeaturedCreators />
+        <FAQSection 
+          title="Frequently Asked Questions About Tech Education"
+          description="Find answers to common questions about finding and learning from tech content creators"
+          faqs={platformFAQs}
+        />
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generatePlatformFAQSchema())
+        }}
+      />
     </div>
   );
 }

@@ -58,6 +58,18 @@
 }
 
 @layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .mobile-snap {
+    scroll-snap-type: x mandatory;
+    scroll-padding: 1rem;
+  }
+  
+  .mobile-snap > * {
+    scroll-snap-align: start;
+  }
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 8s ease infinite;
@@ -73,6 +85,27 @@
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  /* FAQ Prose Styles */
+  .prose-muted {
+    @apply text-muted-foreground;
+  }
+  
+  .prose-muted a {
+    @apply text-primary hover:text-primary/80 no-underline;
+  }
+  
+  .prose-muted strong {
+    @apply text-foreground font-semibold;
+  }
+  
+  .prose-muted ul {
+    @apply list-disc pl-4 space-y-2;
+  }
+  
+  .prose-muted ol {
+    @apply list-decimal pl-4 space-y-2;
   }
 }
 

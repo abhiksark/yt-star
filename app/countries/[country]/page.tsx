@@ -30,19 +30,22 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
     creator.country && creator.country.toUpperCase() === countryCode.toUpperCase()
   );
 
-  const title = `${countryName} Tech Content Creators - Learn from Local Experts`;
-  const description = `Discover ${countryCreators.length} tech content creators from ${countryName}. Learn programming, system design, and more from local experts.`;
+  const title = `Best ${countryName} Tech YouTubers and Content Creators`;
+  const description = `Find the top ${countryCreators.length} tech content creators and programming educators from ${countryName}. Learn software development, system design, and web development from expert ${countryName} instructors.`;
   const url = getCanonicalUrl(`countries/${params.country}`);
 
   return {
     title,
     description,
     keywords: [
-      `${countryName} tech creators`,
-      `${countryName} programming tutorials`,
-      `${countryName} tech education`,
+      `${countryName} tech youtubers`,
+      `${countryName} programming teachers`,
+      `${countryName} coding tutorials`,
+      `${countryName} software development`,
+      `${countryName} tech educators`,
       'local tech experts',
       'programming education',
+      'tech tutorials',
     ],
     alternates: {
       canonical: url,
