@@ -120,7 +120,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'daily' as const,
     priority: 0.7,
   }));
-  
+
+  // Country pages
+  const countryPages = creators
+    .map(creator => creator.country)
+    .filter((country, index, self) => country && self.indexOf(country) === index)
+    .map(country => ({
+      url: getCanonicalUrl(`countries/${country.toLowerCase()}`),
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
 
   // Blog posts
   const blogPosts = getAllPosts().map((post) => ({
@@ -130,13 +140,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [
+  // Search pages (with lower priority as they're dynamic)
+  const searchPages = [
+    {
+      url: getCanonicalUrl('search'),
+      lastModified: currentDate,
+      changeFrequency: 'daily' as const,
+      priority: 0.5,
+    }
+  ];
+
+  // Combine all URLs and remove duplicates
+  const allUrls = [
     ...primaryPages,
     ...secondaryPages,
     ...categoryPages,
     ...creatorPages,
+    ...countryPages,
     ...authPages,
     ...blogPosts,
     ...legalPages,
+    ...searchPages,
   ];
+
+  // Remove duplicate URLs (keeping the one with higher priority)
+  const uniqueUrls = Array.from(
+    new Map(
+      allUrls
+        .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+        .map(item => [item.url.toLowerCase(), item])
+    ).values()
+  );
+
+  return uniqueUrls;
 }
