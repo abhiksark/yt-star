@@ -1,3 +1,5 @@
+'use client';
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -21,7 +23,7 @@ const EXCLUDE_TRAILING_SLASH_NORM = [
   '/static',
 ];
 
-export function middleware(request: NextRequest) {
+function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const currentPath = url.pathname;
 
@@ -76,7 +78,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
+const config = {
   matcher: [
     /*
      * Match all request paths except:
@@ -89,3 +91,5 @@ export const config = {
     '/((?!api|_next|_static|_vercel|[\\w-]+\\.\\w+).*)',
   ],
 };
+
+export { middleware, config };

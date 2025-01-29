@@ -27,13 +27,13 @@ export function FAQSection({
     <section className="py-12 sm:py-16">
       <div className="max-w-4xl mx-auto">
         <div className="text-center space-y-4 mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+          <h2 className="text-3xl font-bold tracking-tight">
             {title}
           </h2>
           {description && (
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h3 className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {description}
-            </p>
+            </h3>
           )}
         </div>
         
@@ -54,12 +54,12 @@ export function FAQSection({
                 itemProp="mainEntity"
                 itemType="https://schema.org/Question"
               >
-                <h3 
+                <h4 
                   className="font-semibold text-lg"
                   itemProp="name"
                 >
                   {faq.question}
-                </h3>
+                </h4>
                 <ChevronDown 
                   className={cn(
                     "h-5 w-5 shrink-0 text-muted-foreground transition-transform",

@@ -22,6 +22,7 @@ export function Navigation() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/categories", label: "Categories" },
+    { href: "/creators", label: "Creators" },
     { href: "/countries", label: "Countries" },
     { href: "/blog", label: "Blog" },
     { href: "/about", label: "About" },

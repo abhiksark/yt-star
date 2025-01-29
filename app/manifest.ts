@@ -15,13 +15,13 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png',
-        // purpose: 'any maskable'
+        purpose: 'any maskable'
       },
       {
         src: '/android-chrome-512x512.png',
         sizes: '512x512',
         type: 'image/png',
-        // purpose: 'any maskable'
+        purpose: 'any maskable'
       }
     ],
     categories: ['education', 'technology', 'development'],
@@ -30,8 +30,8 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/screenshots/home.png',
         sizes: '1280x720',
         type: 'image/png',
-        // platform: 'wide',
-        // label: 'Homepage of BestYoutubeChannels'
+        platform: 'wide',
+        label: 'Homepage of BestYoutubeChannels'
       }
     ],
     shortcuts: [

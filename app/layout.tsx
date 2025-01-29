@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { generateWebsiteSchema } from "@/lib/schema";
 import { Toaster } from "@/components/ui/toaster";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { cn, getCanonicalUrl } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -92,7 +93,7 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
-    // bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
+    bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
   },
   other: {
     'apple-mobile-web-app-capable': 'yes',
@@ -183,8 +184,10 @@ export default function RootLayout({
           <div className="min-h-screen bg-background flex flex-col">
             <Navigation />
             <main className="container mx-auto px-4 py-8 flex-grow">
+              <ErrorBoundary>
               <Toaster />
               {children}
+              </ErrorBoundary>
             </main>
             <Footer />
           </div>

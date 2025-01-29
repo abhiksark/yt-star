@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
+import { TrendingCreators } from "@/components/trending-creators";
 import { Categories } from "@/components/categories";
 import { FAQSection } from "@/components/faq-section";
 import { platformFAQs, generatePlatformFAQSchema } from "@/lib/faq";
@@ -104,13 +105,12 @@ export default function Home() {
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
         
         <div className="space-y-6 max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter px-4">
-            Discover <span className="text-gradient">Top Tech</span> Content Creators
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter px-4">
+            Discover Top Tech Content Creators
           </h1>
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl mx-auto px-4">
-            Find your next favorite tech YouTuber from our curated list of content creators
-            across programming, system design, and software development.
-          </p>
+          <h2 className="text-muted-foreground text-xl sm:text-2xl md:text-3xl max-w-2xl mx-auto px-4">
+            Expert tutorials in programming, system design, and web development
+          </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
             <SearchCreators />
           </div>
@@ -122,14 +122,49 @@ export default function Home() {
       </section>
 
       <div className="container px-4 space-y-12 sm:space-y-16">
-        <Categories />
-        <FeaturedCreators />
+        <TrendingCreators />
+        
+        <section>
+          <h2 className="text-3xl font-bold mb-6">Featured Content Creators</h2>
+          <FeaturedCreators />
+        </section>
+        
+        <section>
+          <h2 className="text-3xl font-bold mb-6">Browse Categories</h2>
+          <Categories />
+        </section>
+        
         <FAQSection 
           title="Frequently Asked Questions About Tech Education"
           description="Find answers to common questions about finding and learning from tech content creators"
           faqs={platformFAQs}
         />
       </div>
+      
+      {/* Trust signals */}
+      <section className="bg-muted/50 py-12 mt-16">
+        <div className="container px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-primary">50+</p>
+              <p className="text-sm text-muted-foreground">Expert Creators</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-primary">10K+</p>
+              <p className="text-sm text-muted-foreground">Monthly Users</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-primary">30+</p>
+              <p className="text-sm text-muted-foreground">Tech Topics</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-3xl font-bold text-primary">15K+</p>
+              <p className="text-sm text-muted-foreground">Hours of Content</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
