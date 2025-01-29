@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: CreatorPageProps): Promise<Me
   const url = `${baseUrl}/creators/${params.slug}`;
 
   return {
-    title: `${creator.name} - Tech Content Creator Profile | Best YouTube Channels`,
+    title: `${creator.name} - Tech Content Creator | Best YouTube Channels`,
     description: `Learn from ${creator.name}, a tech content creator with ${creator.subscriberCount} subscribers. Expert tutorials in ${creator.categories.join(', ')}. Watch ${creator.videoCount}+ educational videos.`,
     
     keywords: [
