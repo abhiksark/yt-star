@@ -18,7 +18,7 @@ export function SearchCreators() {
   const handleSearch = React.useCallback(async (value: string) => {
     const searchResults = await searchCreators(value);
     setResults(searchResults);
-  }, []);
+  }, []); // No dependencies needed as searchCreators is stable
 
   React.useEffect(() => {
     if (debouncedQuery) {
@@ -26,7 +26,7 @@ export function SearchCreators() {
     } else {
       setResults([]);
     }
-  }, [debouncedQuery]);
+  }, [debouncedQuery, handleSearch]); // Added handleSearch to dependencies
 
   return (
     <div className="w-full max-w-lg mx-auto">
@@ -45,8 +45,8 @@ export function SearchCreators() {
             className="pl-10 h-12 bg-background/80 backdrop-blur-sm border-primary/20 focus:border-primary/40 hover:border-primary/40 transition-colors w-full"
           />
           <Button type="submit" size="lg" className="shrink-0">
-          Search Creators
-          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            Search Creators
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </form>
       </div>

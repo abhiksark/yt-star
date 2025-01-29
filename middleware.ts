@@ -8,6 +8,10 @@ const CANONICAL_REDIRECTS = new Map([
   ['/home', '/'],
   ['/blog/index', '/blog'],
   ['/categories/index', '/categories'],
+  ['/creator', '/creators'],
+  ['/category', '/categories'],
+  ['/articles', '/blog'],
+  ['/posts', '/blog'],
 ]);
 
 // URLs that should be excluded from trailing slash normalization
@@ -19,29 +23,35 @@ const EXCLUDE_TRAILING_SLASH_NORM = [
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
-  const { pathname } = url;
+  const currentPath = url.pathname;
 
   // Check if path should be excluded from processing
-  if (EXCLUDE_TRAILING_SLASH_NORM.some(prefix => pathname.startsWith(prefix))) {
+  if (EXCLUDE_TRAILING_SLASH_NORM.some(prefix => currentPath.startsWith(prefix))) {
     return NextResponse.next();
   }
 
   // Handle canonical redirects
-  const canonicalPath = CANONICAL_REDIRECTS.get(pathname.toLowerCase());
+  const canonicalPath = CANONICAL_REDIRECTS.get(currentPath.toLowerCase());
   if (canonicalPath) {
     url.pathname = canonicalPath;
     return NextResponse.redirect(url, 301);
   }
 
   // Normalize trailing slashes
-  if (pathname !== '/' && pathname.endsWith('/')) {
-    url.pathname = pathname.slice(0, -1);
+  if (currentPath !== '/' && currentPath.endsWith('/')) {
+    url.pathname = currentPath.slice(0, -1);
     return NextResponse.redirect(url, 301);
   }
 
   // Handle uppercase URLs
-  if (pathname !== pathname.toLowerCase()) {
-    url.pathname = pathname.toLowerCase();
+  if (currentPath !== currentPath.toLowerCase()) {
+    url.pathname = currentPath.toLowerCase();
+    return NextResponse.redirect(url, 301);
+  }
+
+  // Handle common misspellings and redirects
+  if (currentPath.includes('youtube') && !currentPath.includes('youtubechannels')) {
+    url.pathname = currentPath.replace('youtube', 'youtubechannels');
     return NextResponse.redirect(url, 301);
   }
 

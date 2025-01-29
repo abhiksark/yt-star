@@ -1,8 +1,14 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
 import { SearchButton } from "@/components/search-button";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -37,11 +43,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
   },
   category: 'Technology',
   openGraph: {
@@ -79,11 +80,6 @@ export const metadata: Metadata = {
   applicationName: 'Tech Content Creators',
   publisher: 'Tech Content Creators Platform',
   metadataBase: new URL('https://www.bestyoutubechannels.com'),
-  // verification: {
-  //   google: 'G-WXTHS67SQN',
-  //   yandex: 'yandex-verification-code',
-  //   bing: 'bing-verification-code'
-  // },
   other: {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black',
