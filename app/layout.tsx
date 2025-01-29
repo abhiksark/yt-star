@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { getCanonicalUrl } from "@/lib/utils";
+import { generateWebsiteSchema } from "@/lib/schema";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,6 +79,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="shortcut icon" href="/favicon.ico" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateWebsiteSchema())
+          }}
+        />
       </head>
       <body className={cn(inter.className)} suppressHydrationWarning>
         <ThemeProvider

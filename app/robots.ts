@@ -12,8 +12,11 @@ export default function robots(): MetadataRoute.Robots {
         '/admin/',
         '/api/',
         '/*.json$',
+        '/search', // Add if you have a search page with dynamic results
+        '/profile', // Add for user-specific pages
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

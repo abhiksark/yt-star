@@ -1,10 +1,16 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { categories, getCreators } from "@/lib/data";
 import { CategoryHeader } from "@/components/category-header";
 import { CategoryGrid } from "@/components/category-grid";
 import { CategoryFilter } from "@/components/category-filter";
 import { Suspense } from "react";
 import { CategoryGridSkeleton } from "@/components/skeletons";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Browse Categories - Tech Content Creators",
@@ -21,12 +27,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
-
   category: 'Technology',
   openGraph: {
     title: "Browse Categories - Tech Content Creators",
@@ -34,21 +34,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Tech Content Creators",
-    // images: [
-    //   {
-    //     url: "/og-image.png",
-    //     width: 1200,
-    //     height: 630,
-    //     alt: "Tech Content Creators Categories"
-    //   }
-    // ]
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Browse Categories - Tech Content Creators",
-  //   description: "Explore tech content creators by category. Find experts in system design, frontend, backend, and more.",
-  //   images: ["/og-image.png"]
-  // },
   alternates: {
     canonical: "/categories",
     languages: {
@@ -58,8 +44,6 @@ export const metadata: Metadata = {
   authors: [{ name: 'Tech Content Creators' }],
   generator: 'Next.js',
   applicationName: 'Tech Content Creators',
-  // referrer: 'origin-when-cross-origin',
-  // creator: 'Tech Content Creators Team',
   publisher: 'Tech Content Creators',
   formatDetection: {
     email: false,
