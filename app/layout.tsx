@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.bestyoutubechannels.com'),
   title: {
     default: "BestYoutubeChannels - Discover Top Tech Content Creators",
-    template: "%s | BestYoutubeChannels"
+    template: "%s"
   },
   description: "Discover the best YouTube channels for programming, system design, and tech education. Find expert content creators across different programming languages and technologies.",
   keywords: [
