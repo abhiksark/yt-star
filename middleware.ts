@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// URLs that should redirect to their canonical versions
-const CANONICAL_REDIRECTS = new Map([
+// Define canonical redirects as a constant to avoid duplicate definitions
+const CANONICAL_REDIRECTS: ReadonlyMap<string, string> = new Map([
   ['/index', '/'],
   ['/index.html', '/'],
   ['/home', '/'],
@@ -15,7 +15,7 @@ const CANONICAL_REDIRECTS = new Map([
 ]);
 
 // URLs that should be excluded from trailing slash normalization
-const EXCLUDE_TRAILING_SLASH_NORM = [
+const EXCLUDE_TRAILING_SLASH_NORM: readonly string[] = [
   '/_next',
   '/api',
   '/static',

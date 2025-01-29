@@ -1,4 +1,4 @@
-import { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { SearchCreators } from "@/components/search-creators";
 import { FeaturedCreators } from "@/components/featured-creators";
 import { Categories } from "@/components/categories";
@@ -12,12 +12,12 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: {
-    default: "Tech Content Creators - Best Programming & Tech YouTube Channels 2024",
+    default: "Tech Content Creators - Best Programming & Tech YouTube Channels 2025",
     template: "%s | Tech Content Creators"
   },
-  description: "Discover top tech YouTubers and programming content creators. Expert tutorials in software development, system design, web development, and coding education. Curated list of the best tech educators for 2024.",
+  description: "Discover top tech YouTubers and programming content creators. Expert tutorials in software development, system design, web development, and coding education. Curated list of the best tech educators for 2025.",
   keywords: [
     "tech YouTubers",
     "programming tutorials",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "system design tutorials",
     "web development courses",
     "programming education",
-    "tech tutorials 2024",
+    "tech tutorials 2025",
     "software engineering education",
     "learn to code",
     "developer content",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   category: 'Technology',
   openGraph: {
-    title: "Best Tech Content Creators & Programming YouTubers 2024",
+    title: "Best Tech Content Creators & Programming YouTubers 2025",
     description: "Find expert tech content creators and programming YouTubers. Learn software development, system design, and web development from industry experts.",
     type: "website",
     locale: "en_US",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Discover Top Tech Content Creators 2024",
+    title: "Discover Top Tech Content Creators 2025",
     description: "Find the best tech content creators and programming YouTubers. Learn from experts in software development.",
     images: ["/twitter-image.png"],
     creator: "@techcreators",
@@ -92,6 +92,8 @@ export const metadata: Metadata = {
     'theme-color': '#ffffff'
   }
 };
+
+export { metadata };
 
 export default function Home() {
   return (

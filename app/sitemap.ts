@@ -2,9 +2,11 @@ import { MetadataRoute } from 'next';
 import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
 import { getCanonicalUrl } from '@/lib/utils';
+import { getBaseUrl } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const currentDate = new Date();
+  const currentDate = new Date().toISOString();
+  const baseUrl = getBaseUrl();
 
   // High-priority core pages
   const primaryPages = [
@@ -135,9 +137,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog posts
   const blogPosts = getAllPosts().map((post) => ({
     url: getCanonicalUrl(`blog/${post.slug}`),
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.date).toISOString(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
+    alternateRefs: [
+      {
+        href: getCanonicalUrl(`blog/${post.slug}`),
+        hreflang: 'en-US'
+      }
+    ]
   }));
 
   // Combine all URLs and remove duplicates
