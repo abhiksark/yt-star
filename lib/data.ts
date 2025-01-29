@@ -19,8 +19,6 @@ export const categories: Category[] = [
   { name: 'Computer Architecture', slug: 'computer-architecture' },
 ];
 
-export const channelsData: Creator[] = [];
-
 export async function getCreators(): Promise<Creator[]> {
   const { data, error } = await supabase
     .from('profiles')
@@ -31,7 +29,7 @@ export async function getCreators(): Promise<Creator[]> {
     return [];
   }
   
-  return data;
+  return data || [];
 }
 
 export async function getCreatorBySlug(slug: string): Promise<Creator | null> {
@@ -47,4 +45,17 @@ export async function getCreatorBySlug(slug: string): Promise<Creator | null> {
   }
   
   return data;
+}
+
+export async function getCountries(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('country');
+  
+  if (error) {
+    console.error('Error fetching countries:', error);
+    return [];
+  }
+  
+  return Array.from(new Set(data.map(profile => profile.country).filter(Boolean)));
 }

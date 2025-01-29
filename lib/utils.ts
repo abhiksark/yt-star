@@ -14,63 +14,78 @@ export function formatDate(date: string) {
 }
 
 export function getCanonicalUrl(path: string = ''): string {
-  const baseUrl = 'https://www.bestyoutubechannels.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com';
   // Remove leading and trailing slashes, then join with base URL
   const cleanPath = path.replace(/^\/+|\/+$/g, '');
   return cleanPath ? `${baseUrl}/${cleanPath}` : baseUrl;
 }
 
-interface OpenGraphMetadata {
-  title: string;
-  description: string;
-  path: string;
-  type?: 'website' | 'article';
-  image?: {
-    url: string;
-    alt: string;
-    width?: number;
-    height?: number;
-  };
-}
-
-export function generateMetadata({
+export function generateSEOMetadata({
   title,
   description,
   path,
   type = 'website',
-  image,
-}: OpenGraphMetadata) {
-  const defaultImage = {
-    url: getCanonicalUrl('og/default.png'),
-    width: 1200,
-    height: 630,
-    alt: 'BestYoutubeChannels - Tech Education Discovery Platform',
-  };
-
-  const ogImage = image || defaultImage;
+  image = 'og/default.png',
+  keywords = [],
+}: {
+  title: string;
+  description: string;
+  path: string;
+  type?: 'website' | 'article';
+  image?: string;
+  keywords?: string[];
+}) {
+  const url = getCanonicalUrl(path);
+  const imageUrl = getCanonicalUrl(image);
 
   return {
-    title,
+    title: `${title} | BestYoutubeChannels`,
     description,
+    keywords: [
+      ...keywords,
+      'tech education',
+      'programming tutorials',
+      'coding tutorials',
+      'tech content creators',
+    ],
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com'),
     alternates: {
-      canonical: getCanonicalUrl(path),
+      canonical: url,
     },
     openGraph: {
       title,
       description,
-      type,
-      url: getCanonicalUrl(path),
+      url,
       siteName: 'BestYoutubeChannels',
+      type,
       locale: 'en_US',
-      images: [ogImage],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage.url],
+      images: [imageUrl],
       creator: '@bestyoutubechannels',
       site: '@bestyoutubechannels',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   };
 }

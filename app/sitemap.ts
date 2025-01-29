@@ -18,6 +18,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
       changeFrequency: 'daily' as const,
     },
+    {
+      route: 'countries',
+      priority: 0.9,
+      changeFrequency: 'daily' as const,
+    }
   ].map((page) => ({
     url: getCanonicalUrl(page.route),
     lastModified: currentDate,
@@ -115,6 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'daily' as const,
     priority: 0.7,
   }));
+  
 
   // Blog posts
   const blogPosts = getAllPosts().map((post) => ({

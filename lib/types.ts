@@ -19,6 +19,12 @@ export interface Category {
   slug: string;
 }
 
+export interface Country {
+  code: string;
+  name: string;
+  slug: string;
+}
+
 interface Job {
   id: number;
   title: string;
