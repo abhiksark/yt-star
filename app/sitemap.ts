@@ -22,6 +22,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       route: 'countries',
       priority: 0.9,
       changeFrequency: 'daily' as const,
+    },
+    {
+      route: 'blog',
+      priority: 0.9,
+      changeFrequency: 'daily' as const,
     }
   ].map((page) => ({
     url: getCanonicalUrl(page.route),
@@ -36,11 +41,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       route: 'about',
       priority: 0.8,
       changeFrequency: 'weekly' as const,
-    },
-    {
-      route: 'blog',
-      priority: 0.8,
-      changeFrequency: 'daily' as const,
     },
     {
       route: 'contact',
@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: page.priority,
   }));
 
-  // Authentication and profile pages
+  // Authentication and profile pages (no-index in robots.txt)
   const authPages = [
     {
       route: 'signin',
@@ -140,16 +140,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  // Search pages (with lower priority as they're dynamic)
-  const searchPages = [
-    {
-      url: getCanonicalUrl('search'),
-      lastModified: currentDate,
-      changeFrequency: 'daily' as const,
-      priority: 0.5,
-    }
-  ];
-
   // Combine all URLs and remove duplicates
   const allUrls = [
     ...primaryPages,
@@ -157,10 +147,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryPages,
     ...creatorPages,
     ...countryPages,
-    ...authPages,
     ...blogPosts,
     ...legalPages,
-    ...searchPages,
+    // Exclude auth pages from sitemap since they should be no-indexed
   ];
 
   // Remove duplicate URLs (keeping the one with higher priority)

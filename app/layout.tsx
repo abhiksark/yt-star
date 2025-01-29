@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
+import { cn, getCanonicalUrl } from "@/lib/utils";
 import { generateWebsiteSchema } from "@/lib/schema";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com',
+    url: getCanonicalUrl(),
     title: 'BestYoutubeChannels - Discover Top Tech Content Creators',
     description: 'Find the best tech education content creators on YouTube',
     siteName: 'BestYoutubeChannels',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     images: ['/og/default.png'],
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com',
+    canonical: getCanonicalUrl(),
   },
   robots: {
     index: true,
