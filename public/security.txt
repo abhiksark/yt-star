@@ -1,0 +1,7 @@
+# Security Policy
+Contact: mailto:security@bestyoutubechannels.com
+Expires: 2025-12-31T23:59:59.000Z
+Encryption: https://bestyoutubechannels.com/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://bestyoutubechannels.com/.well-known/security.txt
+Policy: https://bestyoutubechannels.com/security-policy

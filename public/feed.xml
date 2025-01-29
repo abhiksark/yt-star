@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BestYoutubeChannels Blog</title>
+    <link>https://www.bestyoutubechannels.com</link>
+    <description>Latest articles and updates from BestYoutubeChannels</description>
+    <language>en-US</language>
+    <lastBuildDate>Wed, 14 Feb 2024 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://www.bestyoutubechannels.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <copyright>Copyright 2024, BestYoutubeChannels</copyright>
+    <category>Technology</category>
+    <category>Education</category>
+    <category>Programming</category>
+    <image>
+      <url>https://www.bestyoutubechannels.com/logo.png</url>
+      <title>BestYoutubeChannels</title>
+      <link>https://www.bestyoutubechannels.com</link>
+    </image>
+  </channel>
+</rss>

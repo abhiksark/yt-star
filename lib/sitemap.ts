@@ -1,14 +1,15 @@
 import { MetadataRoute } from 'next';
 import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
-import { getCanonicalUrl } from '@/lib/utils';
+import { getCountryName, getCountrySlug, isValidCountryCode } from '@/lib/countries';
 
 // Centralize URL normalization
 function normalizeUrl(url: string): string {
   return url
     .toLowerCase()
-    .replace(/\/+$/, '') // Remove trailing slashes
-    .replace(/\/{2,}/g, '/'); // Remove duplicate slashes
+    .trim()
+    .replace(/([^:]\/)\/+/g, '$1') // Remove duplicate slashes except after protocol
+    .replace(/\/$/, ''); // Remove trailing slash
 }
 
 // Validate URL is properly formed
@@ -21,9 +22,21 @@ function isValidUrl(url: string): boolean {
   }
 }
 
+// Get base URL with protocol
+function getBaseUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com';
+}
+
+// Create canonical URL
+function createCanonicalUrl(path: string = ''): string {
+  const baseUrl = getBaseUrl();
+  const cleanPath = path.replace(/^\/+/, '').replace(/\/+$/, '');
+  return cleanPath ? `${baseUrl}/${cleanPath}` : baseUrl;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString();
-  const baseUrl = 'https://www.bestyoutubechannels.com';
+  const baseUrl = getBaseUrl();
 
   // Core pages with strict canonical paths
   const coreRoutes = [
@@ -34,37 +47,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/categories`,
+      url: createCanonicalUrl('categories'),
       lastModified: currentDate,
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/blog`,
+      url: createCanonicalUrl('countries'),
+      lastModified: currentDate,
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: createCanonicalUrl('blog'),
       lastModified: currentDate,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/about`,
+      url: createCanonicalUrl('about'),
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: createCanonicalUrl('contact'),
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/terms`,
+      url: createCanonicalUrl('terms'),
       lastModified: currentDate,
       changeFrequency: 'yearly' as const,
       priority: 0.4,
     },
     {
-      url: `${baseUrl}/privacy`,
+      url: createCanonicalUrl('privacy'),
       lastModified: currentDate,
       changeFrequency: 'yearly' as const,
       priority: 0.4,
@@ -73,7 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic category pages
   const categoryUrls = categories.map((category) => ({
-    url: normalizeUrl(`${baseUrl}/categories/${category.slug}`),
+    url: createCanonicalUrl(`categories/${category.slug}`),
     lastModified: currentDate,
     changeFrequency: 'daily' as const,
     priority: 0.8,
@@ -81,8 +100,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic creator pages
   const creators = await getCreators();
+  
+  // Get unique countries and generate country pages
+  const countries = Array.from(
+    new Set(
+      creators
+        .filter(creator => creator.country && isValidCountryCode(creator.country))
+        .map(creator => creator.country.toUpperCase())
+    )
+  ).sort();
+
+  const countryUrls = countries.map(countryCode => {
+    const countryName = getCountryName(countryCode);
+    const countrySlug = getCountrySlug(countryCode);
+    return {
+      url: createCanonicalUrl(`countries/${countrySlug}`),
+      lastModified: currentDate,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+      alternateNames: [countryName],
+    };
+  });
+
   const creatorUrls = creators.map((creator) => ({
-    url: normalizeUrl(`${baseUrl}/creators/${creator.slug}`),
+    url: createCanonicalUrl(`creators/${creator.slug}`),
     lastModified: currentDate,
     changeFrequency: 'daily' as const,
     priority: 0.7,
@@ -91,7 +132,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic blog posts
   const blogPosts = getAllPosts();
   const blogUrls = blogPosts.map((post) => ({
-    url: normalizeUrl(`${baseUrl}/blog/${post.slug}`),
+    url: createCanonicalUrl(`blog/${post.slug}`),
     lastModified: new Date(post.date).toISOString(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
@@ -101,14 +142,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allUrls = [
     ...coreRoutes,
     ...categoryUrls,
+    ...countryUrls,
     ...creatorUrls,
     ...blogUrls,
-  ].filter((route) => isValidUrl(route.url));
+  ].filter((route) => {
+    const isValid = isValidUrl(route.url);
+    if (!isValid) {
+      console.warn(`Invalid URL found in sitemap: ${route.url}`);
+    }
+    return isValid;
+  });
 
   // Remove duplicate URLs (keeping the one with higher priority)
   const uniqueUrls = Array.from(
     new Map(
-      allUrls.sort((a, b) => b.priority - a.priority)
+      allUrls
+        .sort((a, b) => b.priority - a.priority)
         .map(item => [normalizeUrl(item.url), item])
     ).values()
   );

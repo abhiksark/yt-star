@@ -1,0 +1,12 @@
+/* TEAM */
+  Creator: BestYoutubeChannels Team
+  Contact: contact@bestyoutubechannels.com
+  Twitter: @bestyoutubechannels
+  Location: Global
+
+/* SITE */
+  Last update: 2024/02/14
+  Standards: HTML5, CSS3, TypeScript
+  Components: Next.js, React, Tailwind CSS
+  Software: VS Code, Git
+  Language: English

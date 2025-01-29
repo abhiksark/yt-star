@@ -22,6 +22,8 @@ export function Navigation() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/categories", label: "Categories" },
+    { href: "/creators", label: "Creators" },
+    { href: "/countries", label: "Countries" },
     { href: "/blog", label: "Blog" },
     { href: "/about", label: "About" },
   ];
@@ -30,7 +32,6 @@ export function Navigation() {
     <header className="border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -74,7 +75,6 @@ export function Navigation() {
             <span className="font-bold text-lg sm:text-xl">BestYoutubeChannels</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-6">
             {links.map((link) => (
               <Link
