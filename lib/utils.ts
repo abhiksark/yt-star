@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { DEFAULT_METADATA, COMMON_KEYWORDS } from './seo-config';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -67,67 +68,24 @@ export function generateSEOMetadata({
   const formattedTitle = title.length > 60 ? `${title.slice(0, 57)}...` : title;
   const formattedDesc = description.length > 160 ? `${description.slice(0, 157)}...` : description;
 
-  // Common keywords for all pages
-  const commonKeywords = [
-    'tech education',
-    'programming tutorials',
-    'coding education',
-    'tech content creators',
-    'learn programming',
-    'software development',
-    'tech youtube channels',
-    'programming courses',
-    'developer tutorials',
-    'tech learning'
-  ];
-
   // Combine and deduplicate keywords
-  const allKeywords = Array.from(new Set([...keywords, ...commonKeywords]));
+  const allKeywords = Array.from(new Set([...keywords, ...COMMON_KEYWORDS]));
 
-  const baseMetadata: Metadata = {
-    metadataBase: new URL(getBaseUrl()),
+  const metadata: Metadata = {
+    ...DEFAULT_METADATA,
     title: {
       default: `${formattedTitle} | BestYoutubeChannels`,
       template: '%s | BestYoutubeChannels'
     },
     description: formattedDesc,
-    applicationName: 'BestYoutubeChannels',
-    authors: authors.map(author => ({ name: author.name, url: author.url })),
-    generator: 'Next.js',
     keywords: allKeywords,
-    referrer: 'origin-when-cross-origin',
-    themeColor: '#ffffff',
-    colorScheme: 'dark light',
-    viewport: {
-      width: 'device-width',
-      initialScale: 1,
-      maximumScale: 1,
-    },
-    creator: 'BestYoutubeChannels Team',
-    publisher: 'BestYoutubeChannels',
+    authors: authors.length > 0 ? authors.map(author => ({ name: author.name, url: author.url })) : DEFAULT_METADATA.authors,
     category,
-    classification: 'Education/Technology',
-    robots: {
-      index: !noindex,
-      follow: !noindex,
-      'max-snippet': -1,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-      googleBot: {
-        index: !noindex,
-        follow: !noindex,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-        noimageindex: false,
-        'notranslate': false,
-      },
-    },
     openGraph: {
+      ...DEFAULT_METADATA.openGraph,
       title: formattedTitle,
       description: formattedDesc,
       url,
-      siteName: 'BestYoutubeChannels',
       type,
       locale,
       images: [
@@ -145,12 +103,10 @@ export function generateSEOMetadata({
       tags,
     },
     twitter: {
-      card: 'summary_large_image',
+      ...DEFAULT_METADATA.twitter,
       title: formattedTitle,
       description: formattedDesc,
       images: [imageUrl],
-      creator: '@bestyoutubechannels',
-      site: '@bestyoutubechannels',
     },
     alternates: {
       canonical: url,
@@ -159,27 +115,20 @@ export function generateSEOMetadata({
         ...alternateLanguages,
       },
     },
-    verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
-      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
-      other: {
-        'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '',
-      },
-      me: ['https://twitter.com/bestyoutubechannels'],
-    },
-    other: {
-      'apple-mobile-web-app-capable': 'yes',
-      'apple-mobile-web-app-status-bar-style': 'black',
-      'format-detection': 'telephone=no',
-      'mobile-web-app-capable': 'yes',
-      'msapplication-TileColor': '#ffffff',
-      'msapplication-config': '/browserconfig.xml',
-      'theme-color': '#ffffff',
-      rating,
-    },
+    robots: {
+      index: !noindex,
+      follow: !noindex,
+      googleBot: {
+        index: !noindex,
+        follow: !noindex,
+        'max-video-preview': -1,
+        'max-image-preview': 'large' as const,
+        'max-snippet': -1,
+      }
+    }
   };
 
-  return baseMetadata;
+  return metadata;
 }
 
 export { getBaseUrl }
