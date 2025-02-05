@@ -44,12 +44,6 @@ export function generateCreatorSchema(creator: Creator) {
     description: creator.description,
     image: creator.logoUrl,
     url: getCanonicalUrl(`creators/${creator.slug}`),
-    sameAs: [
-      creator.youtubeUrl,
-      creator.websiteUrl,
-      creator.twitterUrl,
-      creator.githubUrl,
-    ].filter(Boolean),
     jobTitle: "Content Creator",
     worksFor: {
       "@type": "Organization",

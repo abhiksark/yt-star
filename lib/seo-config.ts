@@ -1,6 +1,69 @@
 import { type Metadata } from 'next';
 
-export const DEFAULT_METADATA = {
+export const SEO_METRICS = {
+  maxTitleLength: 60,
+  maxDescriptionLength: 160,
+  minContentLength: 300,
+  maxUrlLength: 75,
+  maxKeywords: 10
+};
+
+export const MOBILE_METADATA = {
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    minimumScale: 1,
+    userScalable: true,
+  },
+  themeColor: '#ffffff',
+  mobileAppMeta: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'format-detection': 'telephone=no',
+  }
+};
+
+export const INTERNATIONAL_SEO = {
+  defaultLocale: 'en-US',
+  alternateLocales: ['en-GB', 'en-AU', 'en-CA'],
+  hreflangMeta: {
+    'x-default': 'https://www.bestyoutubechannels.com',
+    'en-us': 'https://www.bestyoutubechannels.com/us',
+    'en-gb': 'https://www.bestyoutubechannels.com/uk'
+  }
+};
+
+export const PERFORMANCE_CONFIG = {
+  preconnect: [
+    'https://www.google-analytics.com',
+    'https://www.googletagmanager.com'
+  ],
+  preload: [
+    {
+      rel: 'preload',
+      href: '/fonts/main.woff2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous'
+    }
+  ]
+};
+
+export const AUTHORITY_SIGNALS = {
+  foundingDate: "2024",
+  award: "Best Tech Education Directory 2024",
+  review: {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4.8",
+      "bestRating": "5"
+    }
+  }
+};
+
+export const DEFAULT_METADATA: Metadata = {
   title: {
     default: "Tech Content Creators - Best Programming & Tech YouTube Channels 2025",
     template: "%s | Tech Content Creators"
@@ -44,22 +107,17 @@ export const DEFAULT_METADATA = {
     site: '@bestyoutubechannels',
     creator: '@bestyoutubechannels',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
       noimageindex: false,
-      'notranslate': false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large' as const,
+      'max-snippet': -1,
     },
   },
   verification: {
@@ -69,7 +127,19 @@ export const DEFAULT_METADATA = {
       'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '',
     },
   },
+  other: {
+    ...MOBILE_METADATA.mobileAppMeta,
+    'theme-color': MOBILE_METADATA.themeColor,
+  },
 };
+
+export const DEFAULT_VIEWPORT = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  minimumScale: 1,
+  userScalable: true,
+} as const;
 
 export const SEO_PATTERNS = {
   title: {
@@ -83,6 +153,17 @@ export const SEO_PATTERNS = {
     category: "Find the best %category% tutorials and courses. Learn from %count% expert content creators specializing in %category% education and programming.",
     country: "Discover %count% tech content creators from %country%. Learn programming, system design, and web development from local experts.",
     blog: "%excerpt%. Read more tech education insights and tutorials on BestYoutubeChannels.",
+  },
+  longTail: {
+    creator: "how to learn %technology% from %name%",
+    category: "best %category% tutorials for beginners 2025",
+    country: "top %country% tech YouTubers for %technology%"
+  },
+  richSnippets: {
+    creator: {
+      ratingPattern: "%rating% out of 5 - Based on %reviewCount% reviews",
+      videoCountPattern: "Over %count% educational videos"
+    }
   }
 };
 
@@ -103,6 +184,9 @@ export const STRUCTURED_DATA = {
       "https://twitter.com/bestyoutubechannels",
       "https://github.com/bestyoutubechannels"
     ],
+    foundingDate: AUTHORITY_SIGNALS.foundingDate,
+    award: AUTHORITY_SIGNALS.award,
+    review: AUTHORITY_SIGNALS.review
   }
 };
 

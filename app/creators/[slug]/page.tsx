@@ -1,6 +1,6 @@
 // Add at the top of the file
 import { generateCreatorSchema, generateBreadcrumbSchema } from "@/lib/schema";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,12 +23,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { Creator } from "@/lib/types";
+import { DEFAULT_VIEWPORT } from "@/lib/seo-config";
 
 interface CreatorPageProps {
   params: { 
     slug: string;
   };
 }
+
+export const viewport: Viewport = DEFAULT_VIEWPORT;
 
 export async function generateMetadata({ params }: CreatorPageProps): Promise<Metadata> {
   const creator = await getCreatorBySlug(params.slug);
