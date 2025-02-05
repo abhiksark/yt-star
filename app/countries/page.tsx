@@ -4,7 +4,9 @@ import { CountryHeader } from "@/components/country-header";
 import { CountryList } from "@/components/country-list";
 import { Shell } from "@/components/shell";
 import { getCountryName, getCountrySlug, isValidCountryCode } from "@/lib/countries";
-import { getCanonicalUrl } from "@/lib/utils";
+import { getCanonicalUrl, generateSEOMetadata } from "@/lib/utils";
+import { generateWebsiteSchema } from "@/lib/schema";
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -12,63 +14,47 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-const title = "Browse by Country - Tech Content Creators";
-const description = "Discover tech content creators from different countries. Find local experts in programming, system design, and more.";
-const url = getCanonicalUrl('countries');
+export async function generateMetadata(): Promise<Metadata> {
+  const creators = await getCreators();
+  const validCreators = creators.filter(
+    creator => creator.country && isValidCountryCode(creator.country)
+  );
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: url,
-  },
-  keywords: [
-    "tech content creators",
-    "programming tutorials",
-    "international educators",
-    "global tech community",
-    "local tech experts",
-    "country-specific tutorials",
-  ],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  // alternates: {
-  //   canonical: url,
-  // },
-  openGraph: {
-    title,
-    description,
-    url,
+  const uniqueCountries = Array.from(
+    new Set(
+      validCreators.map(creator => creator.country.toUpperCase())
+    )
+  );
+
+  return generateSEOMetadata({
+    title: "Browse Tech Content Creators by Country - Global Tech Educators 2025",
+    description: `Discover ${validCreators.length} tech content creators from ${uniqueCountries.length} different countries. Find local experts in programming, system design, web development, and more. Browse our curated list of international tech educators for 2025.`,
+    path: 'countries',
     type: 'website',
-    siteName: 'BestYoutubeChannels',
-    locale: 'en_US',
-    images: [
-      {
-        url: getCanonicalUrl('og/countries.png'),
-        width: 1200,
-        height: 630,
-        alt: 'Browse Tech Content Creators by Country',
-      }
+    keywords: [
+      "tech content creators",
+      "programming tutorials",
+      "international educators",
+      "global tech community",
+      "local tech experts",
+      "country-specific tutorials",
+      "international tech YouTubers",
+      "programming education by country",
+      "global coding tutorials",
+      "tech education worldwide",
+      "international developer community",
+      "regional tech experts"
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title,
-    description,
-    images: [getCanonicalUrl('og/countries.png')],
-    creator: '@bestyoutubechannels',
-    site: '@bestyoutubechannels',
-  },
-};
+    tags: [
+      "tech education",
+      "programming",
+      "international",
+      "tutorials",
+      "learning"
+    ],
+    category: "Education/Technology",
+  });
+}
 
 export default async function CountriesPage() {
   const creators = await getCreators();
@@ -94,12 +80,66 @@ export default async function CountriesPage() {
     creator => creator.country && isValidCountryCode(creator.country)
   );
 
+  // Generate JSON-LD schema
+  const websiteSchema = generateWebsiteSchema();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Browse Tech Content Creators by Country",
+    description: `Discover ${validCreators.length} tech content creators from ${uniqueCountries.length} different countries.`,
+    url: getCanonicalUrl('countries'),
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: countries.length,
+      itemListElement: countries.map((country, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Country",
+          name: country.name,
+          url: getCanonicalUrl(`countries/${country.slug}`),
+          numberOfCreators: validCreators.filter(
+            creator => creator.country?.toUpperCase() === country.code
+          ).length
+        }
+      }))
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          item: {
+            "@id": getCanonicalUrl(),
+            name: "Home"
+          }
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          item: {
+            "@id": getCanonicalUrl('countries'),
+            name: "Countries"
+          }
+        }
+      ]
+    }
+  };
+
   return (
-    <Shell>
-      <div className="space-y-8">
-        <CountryHeader />
-        <CountryList countries={countries} creators={validCreators} />
-      </div>
-    </Shell>
+    <>
+      <Script
+        id="countries-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([websiteSchema, jsonLd]) }}
+      />
+      <Shell>
+        <div className="space-y-8">
+          <CountryHeader />
+          <CountryList countries={countries} creators={validCreators} />
+        </div>
+      </Shell>
+    </>
   );
 }
