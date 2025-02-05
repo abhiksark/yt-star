@@ -1,8 +1,12 @@
 import { MetadataRoute } from 'next';
 import { categories, getCreators } from '@/lib/data';
 import { getAllPosts } from '@/lib/blog';
-import { getCanonicalUrl } from '@/lib/utils';
 import { getCountryName, getCountrySlug, isValidCountryCode } from '@/lib/countries';
+
+// Helper function to ensure URL ends with a trailing slash
+function ensureTrailingSlash(url: string): string {
+  return url.endsWith('/') ? url : `${url}/`;
+}
 
 // Helper function to safely convert string to number
 function safeNumber(value: string | number | undefined): number {
@@ -45,38 +49,34 @@ interface SitemapEntry {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const currentDate = new Date().toISOString();
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com';
+
+    // Core pages with trailing slashes
+    const corePages: SitemapEntry[] = [
+      { url: ensureTrailingSlash(baseUrl), lastModified: currentDate, changeFrequency: 'daily', priority: 1.0 },
+      { url: ensureTrailingSlash(`${baseUrl}/categories`), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
+      { url: ensureTrailingSlash(`${baseUrl}/countries`), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
+      { url: ensureTrailingSlash(`${baseUrl}/creators`), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
+      { url: ensureTrailingSlash(`${baseUrl}/blog`), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
+      { url: ensureTrailingSlash(`${baseUrl}/about`), lastModified: currentDate, changeFrequency: 'monthly', priority: 0.4 },
+      { url: ensureTrailingSlash(`${baseUrl}/contact`), lastModified: currentDate, changeFrequency: 'monthly', priority: 0.4 },
+      { url: ensureTrailingSlash(`${baseUrl}/terms`), lastModified: currentDate, changeFrequency: 'yearly', priority: 0.4 },
+      { url: ensureTrailingSlash(`${baseUrl}/privacy`), lastModified: currentDate, changeFrequency: 'yearly', priority: 0.4 },
+    ];
+
+    // Get all data
     const [creators, posts] = await Promise.all([
       getCreators(),
       getAllPosts()
     ]);
 
-    // Core pages (static routes)
-    const coreEntries: SitemapEntry[] = [
-      { url: getCanonicalUrl(), lastModified: currentDate, changeFrequency: 'daily', priority: 1.0 },
-      { url: getCanonicalUrl('categories'), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
-      { url: getCanonicalUrl('countries'), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
-      { url: getCanonicalUrl('creators'), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
-      { url: getCanonicalUrl('blog'), lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
-      { url: getCanonicalUrl('about'), lastModified: currentDate, changeFrequency: 'monthly', priority: 0.4 },
-      { url: getCanonicalUrl('contact'), lastModified: currentDate, changeFrequency: 'monthly', priority: 0.4 },
-      { url: getCanonicalUrl('terms'), lastModified: currentDate, changeFrequency: 'yearly', priority: 0.4 },
-      { url: getCanonicalUrl('privacy'), lastModified: currentDate, changeFrequency: 'yearly', priority: 0.4 },
-    ];
-
-    // Category pages with engagement-based priority
-    const categoryEntries: SitemapEntry[] = categories.map(category => {
-      const categoryCreators = creators.filter(creator => 
-        creator.categories.some(c => c.toLowerCase().includes(category.name.toLowerCase()))
-      );
-      const freq: ChangeFrequency = categoryCreators.length > 10 ? 'daily' : 'weekly';
-
-      return {
-        url: getCanonicalUrl(`categories/${category.slug}`),
-        lastModified: currentDate,
-        changeFrequency: freq,
-        priority: 0.8,
-      };
-    });
+    // Category pages
+    const categoryEntries: SitemapEntry[] = categories.map(category => ({
+      url: ensureTrailingSlash(`${baseUrl}/categories/${category.slug}`),
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    }));
 
     // Creator pages with engagement-based priority
     const creatorEntries: SitemapEntry[] = creators.map(creator => {
@@ -89,21 +89,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const freq: ChangeFrequency = subscriberCount > 100000 ? 'daily' : 'weekly';
 
       return {
-        url: getCanonicalUrl(`creators/${creator.slug}`),
+        url: ensureTrailingSlash(`${baseUrl}/creators/${creator.slug}`),
         lastModified: currentDate,
         changeFrequency: freq,
         priority,
       };
     });
 
-    // Country pages with creator-count-based priority
+    // Country pages
     const countries = Array.from(
       new Set(
         creators
           .filter(creator => creator.country && isValidCountryCode(creator.country))
           .map(creator => creator.country.toUpperCase())
       )
-    ).sort((a, b) => getCountryName(a).localeCompare(getCountryName(b)));
+    );
 
     const countryEntries: SitemapEntry[] = countries.map(countryCode => {
       const countrySlug = getCountrySlug(countryCode);
@@ -115,14 +115,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const priority = countryCreators.length > 20 ? 0.9 : countryCreators.length > 10 ? 0.8 : 0.7;
 
       return {
-        url: getCanonicalUrl(`countries/${countrySlug}`),
+        url: ensureTrailingSlash(`${baseUrl}/countries/${countrySlug}`),
         lastModified: currentDate,
         changeFrequency: freq,
         priority,
       };
     });
 
-    // Blog posts with recency-based priority
+    // Blog posts
     const blogEntries: SitemapEntry[] = posts.map(post => {
       const postDate = new Date(post.date);
       const daysSincePublished = Math.floor((Date.now() - postDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -132,7 +132,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const freq: ChangeFrequency = daysSincePublished <= 30 ? 'daily' : 'weekly';
       
       return {
-        url: getCanonicalUrl(`blog/${post.slug}`),
+        url: ensureTrailingSlash(`${baseUrl}/blog/${post.slug}`),
         lastModified: postDate.toISOString(),
         changeFrequency: freq,
         priority,
@@ -142,7 +142,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Combine all entries and remove duplicates while preserving highest priority
     const urlMap = new Map<string, SitemapEntry>();
     
-    [...coreEntries, ...categoryEntries, ...creatorEntries, ...countryEntries, ...blogEntries]
+    [...corePages, ...categoryEntries, ...creatorEntries, ...countryEntries, ...blogEntries]
       .forEach(entry => {
         const existingEntry = urlMap.get(entry.url);
         if (!existingEntry || existingEntry.priority < entry.priority) {
@@ -156,7 +156,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Return core pages as fallback
     return [
       {
-        url: getCanonicalUrl(),
+        url: ensureTrailingSlash(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com'),
         lastModified: new Date().toISOString(),
         changeFrequency: 'daily',
         priority: 1.0,
