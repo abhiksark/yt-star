@@ -20,25 +20,17 @@ export const metadata: Metadata = {
   description: "Find the best tech YouTube channels for programming tutorials, system design, and software development. Expert-curated list of educational content creators for 2025.",
   keywords: [
     "best tech youtube channels",
-    "best programming youtube channels",
-    "tech youtube channels",
     "programming tutorials",
     "coding education",
-    "system design tutorials",
-    "software development learning",
     "tech content creators",
-    "learn programming",
-    "developer education",
-    "coding youtube channels",
+    "software development",
     "tech tutorials 2025",
-    "learn coding youtube",
-    "programming education"
+    "developer education"
   ],
   authors: [{ name: "BestYoutubeChannels Team" }],
   creator: "BestYoutubeChannels",
   publisher: "BestYoutubeChannels",
   category: "Technology",
-  classification: "Education",
   formatDetection: {
     email: false,
     address: false,
@@ -47,9 +39,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: getCanonicalUrl(),
-    title: 'Best Tech YouTube Channels 2025 - Programming & Development Tutorials',
-    description: 'Find the best tech YouTube channels for programming tutorials, system design, and software development. Expert-curated list of educational content creators for 2025.',
     siteName: 'BestYoutubeChannels',
     images: [
       {
@@ -57,23 +46,13 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'Best Tech YouTube Channels 2025',
-        type: 'image/png',
       }
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Best Tech YouTube Channels 2025',
-    description: 'Find the best tech YouTube channels for programming tutorials and software development',
     creator: '@bestyoutubechannels',
     site: '@bestyoutubechannels',
-    images: ['/og/default.png'],
-  },
-  alternates: {
-    canonical: getCanonicalUrl(),
-    languages: {
-      'en': getCanonicalUrl(),
-    },
   },
   robots: {
     index: true,
@@ -93,7 +72,6 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
-    // bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
   },
   other: {
     'apple-mobile-web-app-capable': 'yes',

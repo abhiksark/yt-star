@@ -14,18 +14,13 @@ export default function robots(): MetadataRoute.Robots {
         '/admin/',
         '/api/',
         '/*.json$',
-        '/search', // Add if you have a search page with dynamic results
-        '/profile', // Add for user-specific pages
+        '/search',
+        '/profile',
         '/404',
         '/500',
         '/_*',
         '/api/*',
-        '/cdn-cgi/*',
-        '/404',
-        '/500',
-        '/_*',
-        '/api/*',
-        '/cdn-cgi/*',
+        '/cdn-cgi/*'
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
