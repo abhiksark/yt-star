@@ -20,13 +20,24 @@ export function getBaseUrl(): string {
 }
 
 export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean = false): string {
-  const baseUrl = getBaseUrl().replace(/\/$/, '');
+  // Remove www. from base URL to match middleware redirect
+  const baseUrl = getBaseUrl().replace(/^www\./, '').replace(/\/$/, '');
+  
+  // Clean the path: remove leading/trailing slashes and normalize multiple slashes
   const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
   
-  // Always add trailing slash for creator URLs or when explicitly requested
-  const shouldAddTrailingSlash = forceTrailingSlash || cleanPath.startsWith('creators/');
+  // Add trailing slash if:
+  // 1. It's explicitly requested via forceTrailingSlash
+  // 2. The path exists (not homepage)
+  // 3. The path doesn't end with a file extension
+  // 4. The path is for a dynamic route (creators/, countries/, categories/, blog/)
+  const isDynamicRoute = /^(creators|countries|categories|blog)\//.test(cleanPath);
+  const shouldAddTrailingSlash = (forceTrailingSlash || isDynamicRoute || cleanPath) && 
+    !cleanPath.match(/\.[a-zA-Z0-9]+$/);
+  
   const finalPath = cleanPath && shouldAddTrailingSlash ? `${cleanPath}/` : cleanPath;
   
+  // Combine and return
   return cleanPath ? `${baseUrl}/${finalPath}` : baseUrl;
 }
 
