@@ -17,18 +17,28 @@ const CORE_ROUTES: RouteConfig[] = [
   { path: 'privacy/', priority: 0.4, changeFrequency: 'yearly' },
 ];
 
+function ensureTrailingSlash(url: string): string {
+  // Don't add trailing slash to root URL or URLs with file extensions
+  if (url === '' || url.match(/\.[a-zA-Z0-9]+$/)) {
+    return url;
+  }
+  return url.endsWith('/') ? url : `${url}/`;
+}
+
 function createSitemapEntry(
   path: string, 
   priority: number, 
   changeFrequency: ChangeFrequency, 
   lastModified: string = new Date().toISOString()
 ): SitemapEntry {
-  // Ensure path has trailing slash unless it's homepage or has file extension
-  const finalPath = path === '' ? '' : path.endsWith('/') ? path : `${path}/`;
+  // Always ensure trailing slash for paths (except homepage and files)
+  const finalPath = ensureTrailingSlash(path);
+  
+  // Get canonical URL and ensure it has trailing slash
+  const canonicalUrl = getCanonicalUrl(finalPath, true).replace(/^www\./, '');
   
   return {
-    // Remove www. to match middleware redirect
-    url: getCanonicalUrl(finalPath, true).replace(/^www\./, ''),
+    url: ensureTrailingSlash(canonicalUrl),
     lastModified,
     changeFrequency,
     priority,
@@ -41,7 +51,7 @@ async function generateDynamicRoutes(currentDate: string): Promise<SitemapEntry[
 
   // Generate category pages
   const categoryUrls = categories.map(category => 
-    createSitemapEntry(`categories/${category.slug}`, 0.8, 'daily', currentDate)
+    createSitemapEntry(`categories/${category.slug}/`, 0.8, 'daily', currentDate)
   );
 
   // Generate country pages using full country names
@@ -57,17 +67,17 @@ async function generateDynamicRoutes(currentDate: string): Promise<SitemapEntry[
     const countryName = getCountryName(countryCode);
     // Ensure consistent URL format with middleware
     const countrySlug = countryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return createSitemapEntry(`countries/${countrySlug}`, 0.8, 'daily', currentDate);
+    return createSitemapEntry(`countries/${countrySlug}/`, 0.8, 'daily', currentDate);
   });
 
   // Generate creator pages
   const creatorUrls = creators.map(creator => 
-    createSitemapEntry(`creators/${creator.slug}`, 0.7, 'daily', currentDate)
+    createSitemapEntry(`creators/${creator.slug}/`, 0.7, 'daily', currentDate)
   );
 
   // Generate blog post pages
   const blogUrls = blogPosts.map(post => 
-    createSitemapEntry(`blog/${post.slug}`, 0.6, 'weekly', new Date(post.date).toISOString())
+    createSitemapEntry(`blog/${post.slug}/`, 0.6, 'weekly', new Date(post.date).toISOString())
   );
 
   return [...categoryUrls, ...countryUrls, ...creatorUrls, ...blogUrls];
@@ -90,10 +100,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Normalize all URLs to ensure consistency
   const normalizedUrls = allUrls.map(entry => ({
     ...entry,
-    url: entry.url
-      .toLowerCase()
-      .replace(/^www\./, '')
-      .replace(/([^:]\/)\/+/g, '$1')
+    url: ensureTrailingSlash(
+      entry.url
+        .toLowerCase()
+        .replace(/^www\./, '')
+        .replace(/([^:]\/)\/+/g, '$1')
+    )
   }));
 
   // Remove duplicates (keeping higher priority ones)
@@ -101,7 +113,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     new Map(
       normalizedUrls
         .sort((a, b) => (b.priority || 0) - (a.priority || 0))
-        .map(item => [item.url, item])
+        .map(item => [item.url.replace(/\/$/, ''), item]) // Use non-trailing slash version as key
     ).values()
   );
 }

@@ -30,7 +30,11 @@ export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean =
   // 1. It's explicitly requested via forceTrailingSlash
   // 2. The path exists (not homepage)
   // 3. The path doesn't end with a file extension
-  const shouldAddTrailingSlash = (forceTrailingSlash || cleanPath) && !cleanPath.match(/\.[a-zA-Z0-9]+$/);
+  // 4. The path is for a dynamic route (creators/, countries/, categories/, blog/)
+  const isDynamicRoute = /^(creators|countries|categories|blog)\//.test(cleanPath);
+  const shouldAddTrailingSlash = (forceTrailingSlash || isDynamicRoute || cleanPath) && 
+    !cleanPath.match(/\.[a-zA-Z0-9]+$/);
+  
   const finalPath = cleanPath && shouldAddTrailingSlash ? `${cleanPath}/` : cleanPath;
   
   // Combine and return
