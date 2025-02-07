@@ -26,23 +26,23 @@ export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean =
   // Clean the path: remove leading/trailing slashes and normalize multiple slashes
   const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
   
-  // Always add trailing slash except for:
+  // Don't add trailing slash for:
   // 1. Root URL (empty path)
-  // 2. URLs with file extensions (e.g., .jpg, .png)
+  // 2. URLs with file extensions (e.g., .jpg, .png, .xml, .json, etc.)
   const isFile = /\.[a-zA-Z0-9]+$/.test(cleanPath);
   
-  // Determine if we should add trailing slash
-  const shouldAddTrailingSlash = !isFile && cleanPath !== '';
+  // Always add trailing slash except for root and files
+  const shouldAddTrailingSlash = (forceTrailingSlash || cleanPath !== '') && !isFile;
+  
+  // For root URL, never add trailing slash
+  if (!cleanPath) {
+    return baseUrl;
+  }
   
   // Build final path
   let finalPath = cleanPath;
   if (shouldAddTrailingSlash && !finalPath.endsWith('/')) {
     finalPath = `${finalPath}/`;
-  }
-  
-  // For root URL, never add trailing slash
-  if (!cleanPath) {
-    return baseUrl;
   }
   
   // Combine and ensure no double slashes
