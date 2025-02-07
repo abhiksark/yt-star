@@ -20,7 +20,7 @@ export function getBaseUrl(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com').replace(/^www\./, '').replace(/\/$/, '');
 }
 
-export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean = false): string {
+export function getCanonicalUrl(path: string = ''): string {
   const baseUrl = getBaseUrl();
   
   // Clean the path: remove leading/trailing slashes and normalize multiple slashes
@@ -31,9 +31,6 @@ export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean =
   // 2. URLs with file extensions (e.g., .jpg, .png, .xml, .json, etc.)
   const isFile = /\.[a-zA-Z0-9]+$/.test(cleanPath);
   
-  // Always add trailing slash except for root and files
-  const shouldAddTrailingSlash = (forceTrailingSlash || cleanPath !== '') && !isFile;
-  
   // For root URL, never add trailing slash
   if (!cleanPath) {
     return baseUrl;
@@ -41,7 +38,9 @@ export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean =
   
   // Build final path
   let finalPath = cleanPath;
-  if (shouldAddTrailingSlash && !finalPath.endsWith('/')) {
+  
+  // Always add trailing slash except for root and files
+  if (!isFile && !finalPath.endsWith('/')) {
     finalPath = `${finalPath}/`;
   }
   
@@ -65,8 +64,8 @@ export function generateSEOMetadata({
   authors = [],
   section,
 }: SEOMetadataProps): Metadata {
-  // Always use trailing slashes for canonical URLs
-  const url = getCanonicalUrl(path, true);
+  // Get canonical URL (will automatically include trailing slash except for root/files)
+  const url = getCanonicalUrl(path);
   const imageUrl = getCanonicalUrl(image);
   const formattedTitle = truncateText(title, SEO_CONSTANTS.LIMITS.TITLE_LENGTH);
   const formattedDesc = truncateText(description, SEO_CONSTANTS.LIMITS.DESCRIPTION_LENGTH);
@@ -75,13 +74,12 @@ export function generateSEOMetadata({
     title: `${formattedTitle} | ${SEO_CONSTANTS.SITE_NAME}`,
     description: formattedDesc,
     keywords,
-    authors: authors.map(author => ({ name: author.name, url: author.url })),
+    authors: authors.map(author => ({ 
+      name: author.name, 
+      url: author.url ? getCanonicalUrl(author.url) : undefined 
+    })),
     alternates: { 
       canonical: url,
-      // Add non-www version as canonical
-      ...(url.startsWith('www.') && {
-        canonical: url.replace(/^www\./, '')
-      })
     },
     openGraph: {
       title: formattedTitle,
@@ -96,6 +94,9 @@ export function generateSEOMetadata({
         alt: formattedTitle,
       }],
       locale: SEO_CONSTANTS.SOCIAL.LOCALE,
+      ...(publishedTime ? { publishedTime } : {}),
+      ...(modifiedTime ? { modifiedTime } : {}),
+      ...(section ? { section } : {}),
     },
     twitter: {
       card: 'summary_large_image',
@@ -114,11 +115,6 @@ export function generateSEOMetadata({
       nocache: false,
     }
   };
-
-  // Add optional metadata
-  if (publishedTime) metadata.openGraph!.publishedTime = publishedTime;
-  if (modifiedTime) metadata.openGraph!.modifiedTime = modifiedTime;
-  if (section) metadata.openGraph!.section = section;
 
   return metadata;
 }

@@ -12,18 +12,28 @@ export function CountryHeader({ country, count, countryCode }: CountryHeaderProp
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-4xl font-bold tracking-tight">
-              {country ? `${country} Content Creators` : 'Browse by Country'}
-            </h1>
+          <div className="flex items-center gap-3">
             {countryCode && (
-              <Badge variant="outline" className="text-base">
-                {countryCode}
-              </Badge>
+              <img
+                src={`https://flagcdn.com/${countryCode.toLowerCase()}.svg`}
+                alt={`${country} flag`}
+                className="w-10 h-10 rounded-lg object-cover shadow-sm"
+                loading="lazy"
+              />
             )}
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight">
+                {country ? `${country} Content Creators` : 'Browse by Country'}
+              </h1>
+              {countryCode && (
+                <Badge variant="outline" className="text-base mt-2">
+                  {countryCode}
+                </Badge>
+              )}
+            </div>
           </div>
           {country && count !== undefined && (
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-lg mt-2">
               <span className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
                 {count} tech content {count === 1 ? 'creator' : 'creators'}

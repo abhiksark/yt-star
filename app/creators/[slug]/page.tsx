@@ -10,16 +10,22 @@ import { getCreators, getCreatorBySlug } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SimilarCreators } from "@/components/similar-creators";
+import { cn } from "@/lib/utils";
 import { 
-  AlertCircle, 
-  Users, 
-  PlaySquare, 
-  Eye, 
-  BarChart2,
+  AlertCircle,
+  ChevronLeft,
   Globe2,
   Languages,
-  Link as LinkIcon,
-  Youtube
+  Youtube,
+  Users2,
+  PlaySquare,
+  TrendingUp,
+  Sparkles,
+  Folder,
+  Video,
+  GraduationCap,
+  Medal,
+  Tag
 } from "lucide-react";
 import Link from "next/link";
 import type { Creator } from "@/lib/types";
@@ -150,17 +156,37 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
           __html: JSON.stringify([creatorSchema, breadcrumbSchema])
         }}
       />
-      <div className="max-w-4xl mx-auto space-y-8">
-        <Alert variant="default" className="bg-muted/50 border-muted-foreground/20">
+      <div className="relative max-w-5xl mx-auto space-y-8 px-4">
+        {/* Decorative elements */}
+        <div className="absolute -z-10 top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-float" />
+        <div className="absolute -z-10 top-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-float" style={{ animationDelay: '-2s' }} />
+        
+        {/* Back button */}
+        <div className="opacity-0 animate-fade-up" style={{ animationDelay: '100ms' }}>
+          <Link 
+            href="/creators" 
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+          >
+            <ChevronLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Creators
+          </Link>
+        </div>
+
+        {/* Alert */}
+        <Alert variant="default" className="bg-muted/50 border-muted-foreground/20 opacity-0 animate-fade-up" style={{ animationDelay: '200ms' }}>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="text-sm text-muted-foreground">
             Information displayed may not be up-to-date. Statistics are periodically updated.
           </AlertDescription>
         </Alert>
 
-        <div className="space-y-6">
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm font-medium text-muted-foreground mr-2">Topics:</span>
+        <div className="space-y-8">
+          {/* Categories */}
+          <div className="flex flex-wrap gap-2 opacity-0 animate-fade-up" style={{ animationDelay: '300ms' }}>
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground mr-2">
+              <Tag className="h-4 w-4" />
+              Topics:
+            </span>
             {creator.categories.map((category) => (
               <Link 
                 key={category} 
@@ -169,7 +195,7 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
               >
                 <Badge
                   variant="secondary"
-                  className="hover:bg-secondary/80 cursor-pointer transition-colors"
+                  className="hover:bg-primary/10 cursor-pointer transition-all hover:scale-105"
                 >
                   {category}
                 </Badge>
@@ -177,112 +203,103 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
             ))}
           </div>
 
-          <div className="relative bg-gradient-to-b from-muted/50 to-background rounded-xl p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row gap-6 items-start">
+          {/* Main Profile Section */}
+          <div className="relative glass-effect rounded-xl p-8 sm:p-10 overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '400ms' }}>
+            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-accent/5 to-background animate-gradient" />
+            
+            <div className="flex flex-col sm:flex-row gap-8 items-start">
               <div className="relative">
-                <Avatar className="w-24 h-24 ring-2 ring-border">
+                <Avatar className="w-32 h-32 ring-4 ring-primary/20 animate-float">
                   <img src={creator.logoUrl || ''} alt={creator.name} className="object-cover" />
                 </Avatar>
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-background px-2 py-1 rounded-full border shadow-sm">
-                  <StarRating rating={creator.rating || 0} className="scale-90" />
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-background px-3 py-1.5 rounded-full shadow-lg">
+                  <StarRating rating={creator.rating || 0} className="scale-100" />
                 </div>
               </div>
-              <div className="space-y-4 flex-1">
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">{creator.name}</h1>
+              
+              <div className="space-y-6 flex-1">
+                <div className="space-y-3">
+                  <h1 className="text-4xl font-bold tracking-tight">{creator.name}</h1>
                   <p className="text-lg text-muted-foreground leading-relaxed">{creator.description}</p>
                 </div>
-                <div className="flex flex-wrap gap-4 text-sm">
-                  <div className="flex items-center gap-1">
-                    <Globe2 className="h-4 w-4" />
-                    <span>{creator.country}</span>
+                
+                <div className="flex flex-wrap gap-6 text-sm">
+                  <div className="flex items-center gap-2 glass-effect px-3 py-1.5 rounded-full">
+                    <Globe2 className="h-4 w-4 text-primary" />
+                    {creator.country && (
+                      <>
+                        <img
+                          src={`https://flagcdn.com/${creator.country.toLowerCase()}.svg`}
+                          alt={`${creator.country} flag`}
+                          className="w-4 h-4 rounded-sm object-cover"
+                          loading="lazy"
+                        />
+                        <span>{creator.country}</span>
+                      </>
+                    )}
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Languages className="h-4 w-4" />
+                  <div className="flex items-center gap-2 glass-effect px-3 py-1.5 rounded-full">
+                    <Languages className="h-4 w-4 text-primary" />
                     <span>{creator.language}</span>
                   </div>
                 </div>
-                {/* <div className="flex flex-wrap gap-4 mt-4">
-                  <div className="flex items-center gap-1">
-                    <Youtube className="h-4 w-4" />
-                    <Link href="#" className="text-primary hover:text-primary/80 font-medium">
-                      View Channel
-                    </Link>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <LinkIcon className="h-4 w-4" />
-                    <Link href="#" className="text-primary hover:text-primary/80 font-medium">
-                      Website
-                    </Link>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <Users className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-2xl font-bold mb-1">{creator.subscriberCount}</p>
-                  <p className="text-sm text-muted-foreground">Subscribers</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <PlaySquare className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-2xl font-bold mb-1">{creator.videoCount}</p>
-                  <p className="text-sm text-muted-foreground">Videos</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <Eye className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-2xl font-bold mb-1">{creator.views}</p>
-                  <p className="text-sm text-muted-foreground">Views</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <BarChart2 className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                  <div className="flex justify-center gap-1 mb-1">
-                    {Array.from({ length: creator.complexity }).map((_, i) => (
-                      <span key={i} className="w-2 h-2 bg-primary rounded-full" />
-                    ))}
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 opacity-0 animate-fade-up" style={{ animationDelay: '500ms' }}>
+            {[
+              { icon: Users2, label: "Subscribers", value: creator.subscriberCount },
+              { icon: Video, label: "Videos", value: creator.videoCount },
+              { icon: TrendingUp, label: "Views", value: creator.views },
+              { icon: GraduationCap, label: "Content Level", value: "⭐".repeat(creator.complexity) }
+            ].map((stat, index) => (
+              <Card key={stat.label} className="hover-card animate-fade-up opacity-0" style={{ animationDelay: `${600 + index * 100}ms` }}>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <stat.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <p className="text-2xl font-bold mb-1">{stat.value}</p>
+                    <p className="text-sm text-muted-foreground">{stat.label}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Content Level</p>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
+          {/* Content Tabs */}
+          <div className="opacity-0 animate-fade-up" style={{ animationDelay: '900ms' }}>
+            <Tabs defaultValue="videos" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="videos" className="inline-flex items-center gap-2">
+                  <Video className="h-4 w-4" />
+                  Recent Videos
+                </TabsTrigger>
+                <TabsTrigger value="playlists" className="inline-flex items-center gap-2">
+                  <Folder className="h-4 w-4" />
+                  Playlists
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="videos" className="glass-effect rounded-xl p-6">
+                <div className="text-center py-8 text-muted-foreground">
+                  Coming soon: Recent videos from {creator.name}
+                </div>
+              </TabsContent>
+              <TabsContent value="playlists" className="glass-effect rounded-xl p-6">
+                <div className="text-center py-8 text-muted-foreground">
+                  Coming soon: Popular playlists from {creator.name}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Similar Creators */}
+          <div className="opacity-0 animate-fade-up" style={{ animationDelay: '1000ms' }}>
+            <SimilarCreators currentCreator={creator} allCreators={allCreators} />
+          </div>
         </div>
-
-        <Tabs defaultValue="videos" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="videos">Recent Videos</TabsTrigger>
-            <TabsTrigger value="playlists">Playlists</TabsTrigger>
-          </TabsList>
-          <TabsContent value="videos">
-            <div className="text-center py-8 text-muted-foreground">
-              Coming soon: Recent videos from {creator.name}
-            </div>
-          </TabsContent>
-          <TabsContent value="playlists">
-            <div className="text-center py-8 text-muted-foreground">
-              Coming soon: Popular playlists from {creator.name}
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <SimilarCreators currentCreator={creator} allCreators={allCreators} />
       </div>
     </>
   );
