@@ -8,6 +8,7 @@ import { generateWebsiteSchema } from "@/lib/schema";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { cn, getCanonicalUrl } from "@/lib/utils";
+import { SEO_CONSTANTS } from "@/lib/types/seo";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,23 +37,49 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    // Standard favicons
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    // Apple Touch Icons
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    // Other icons
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#5bbad5'
+      },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black',
+    title: SEO_CONSTANTS.SITE_NAME,
+  },
+  applicationName: SEO_CONSTANTS.SITE_NAME,
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'BestYoutubeChannels',
-    images: [
-      {
-        url: '/og/default.png',
-        width: 1200,
-        height: 630,
-        alt: 'Best Tech YouTube Channels 2025',
-      }
-    ],
+    siteName: SEO_CONSTANTS.SITE_NAME,
+    images: [{
+      url: '/og/default.png',
+      width: 1200,
+      height: 630,
+      alt: 'Best Tech YouTube Channels 2025',
+    }],
   },
   twitter: {
     card: 'summary_large_image',
-    creator: '@bestyoutubechannels',
-    site: '@bestyoutubechannels',
+    creator: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
+    site: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
   },
   robots: {
     index: true,
@@ -74,10 +101,6 @@ export const metadata: Metadata = {
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
   },
   other: {
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black',
-    'format-detection': 'telephone=no',
-    'mobile-web-app-capable': 'yes',
     'msapplication-TileColor': '#ffffff',
     'msapplication-config': '/browserconfig.xml',
     'theme-color': '#ffffff'

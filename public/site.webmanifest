@@ -1,0 +1,58 @@
+{
+  "name": "Best Tech YouTube Channels",
+  "short_name": "BestYTChannels",
+  "description": "Find the best tech YouTube channels for programming tutorials and software development",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Categories",
+      "url": "/categories/",
+      "description": "Browse content creator categories"
+    },
+    {
+      "name": "Blog",
+      "url": "/blog/",
+      "description": "Read latest tech articles"
+    }
+  ],
+  "categories": ["education", "technology", "development"],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "scope": "/",
+  "id": "com.bestyoutubechannels.app",
+  "lang": "en",
+  "dir": "ltr"
+} 

@@ -45,13 +45,23 @@ export function getCountryName(code: string): string {
 export function getCountrySlug(code: string): string {
   if (!code) return 'unknown';
   const normalizedCode = code.toUpperCase().trim();
-  return normalizedCode.toLowerCase();
+  const name = countryNames[normalizedCode];
+  if (!name) return 'unknown';
+  return name.toLowerCase().replace(/\s+/g, '-');
 }
 
 export function getCountryFromSlug(slug: string): string | undefined {
   if (!slug) return undefined;
   const normalizedSlug = slug.toLowerCase().trim();
-  return isValidCountryCode(normalizedSlug) ? normalizedSlug.toUpperCase() : undefined;
+  
+  // Find the country code by matching the slug against normalized country names
+  for (const [code, name] of Object.entries(countryNames)) {
+    if (name.toLowerCase().replace(/\s+/g, '-') === normalizedSlug) {
+      return code;
+    }
+  }
+  
+  return undefined;
 }
 
 export function isValidCountryCode(code: string): boolean {

@@ -22,7 +22,11 @@ export function getBaseUrl(): string {
 export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean = false): string {
   const baseUrl = getBaseUrl().replace(/\/$/, '');
   const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
-  const finalPath = cleanPath && forceTrailingSlash ? `${cleanPath}/` : cleanPath;
+  
+  // Always add trailing slash for creator URLs or when explicitly requested
+  const shouldAddTrailingSlash = forceTrailingSlash || cleanPath.startsWith('creators/');
+  const finalPath = cleanPath && shouldAddTrailingSlash ? `${cleanPath}/` : cleanPath;
+  
   return cleanPath ? `${baseUrl}/${finalPath}` : baseUrl;
 }
 

@@ -162,13 +162,18 @@ export default async function CreatorProfile({ params }: CreatorPageProps) {
           <div className="flex flex-wrap gap-2">
             <span className="text-sm font-medium text-muted-foreground mr-2">Topics:</span>
             {creator.categories.map((category) => (
-              <Badge
-                key={category}
-                variant="secondary"
-                className="hover:bg-secondary/80"
+              <Link 
+                key={category} 
+                href={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                className="inline-block"
               >
-                {category}
-              </Badge>
+                <Badge
+                  variant="secondary"
+                  className="hover:bg-secondary/80 cursor-pointer transition-colors"
+                >
+                  {category}
+                </Badge>
+              </Link>
             ))}
           </div>
 
