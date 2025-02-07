@@ -19,10 +19,11 @@ export function getBaseUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com';
 }
 
-export function getCanonicalUrl(path: string = ''): string {
+export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean = false): string {
   const baseUrl = getBaseUrl().replace(/\/$/, '');
   const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
-  return cleanPath ? `${baseUrl}/${cleanPath}` : baseUrl;
+  const finalPath = cleanPath && forceTrailingSlash ? `${cleanPath}/` : cleanPath;
+  return cleanPath ? `${baseUrl}/${finalPath}` : baseUrl;
 }
 
 function truncateText(text: string, maxLength: number): string {
@@ -41,7 +42,8 @@ export function generateSEOMetadata({
   authors = [],
   section,
 }: SEOMetadataProps): Metadata {
-  const url = getCanonicalUrl(path);
+  // Always use trailing slashes for canonical URLs
+  const url = getCanonicalUrl(path, true);
   const imageUrl = getCanonicalUrl(image);
   const formattedTitle = truncateText(title, SEO_CONSTANTS.LIMITS.TITLE_LENGTH);
   const formattedDesc = truncateText(description, SEO_CONSTANTS.LIMITS.DESCRIPTION_LENGTH);
@@ -51,7 +53,13 @@ export function generateSEOMetadata({
     description: formattedDesc,
     keywords,
     authors: authors.map(author => ({ name: author.name, url: author.url })),
-    alternates: { canonical: url },
+    alternates: { 
+      canonical: url,
+      // Add non-www version as canonical
+      ...(url.startsWith('www.') && {
+        canonical: url.replace(/^www\./, '')
+      })
+    },
     openGraph: {
       title: formattedTitle,
       description: formattedDesc,
@@ -73,6 +81,14 @@ export function generateSEOMetadata({
       images: [imageUrl],
       creator: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
       site: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+      nocache: false,
     }
   };
 

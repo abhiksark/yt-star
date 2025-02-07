@@ -23,7 +23,7 @@ function createSitemapEntry(
   lastModified: string = new Date().toISOString()
 ): SitemapEntry {
   return {
-    url: getCanonicalUrl(path),
+    url: getCanonicalUrl(path, true),
     lastModified,
     changeFrequency,
     priority,
