@@ -16,29 +16,37 @@ export function formatDate(date: string): string {
 }
 
 export function getBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com';
+  // Always return non-www version without trailing slash
+  return (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bestyoutubechannels.com').replace(/^www\./, '').replace(/\/$/, '');
 }
 
 export function getCanonicalUrl(path: string = '', forceTrailingSlash: boolean = false): string {
-  // Remove www. from base URL to match middleware redirect
-  const baseUrl = getBaseUrl().replace(/^www\./, '').replace(/\/$/, '');
+  const baseUrl = getBaseUrl();
   
   // Clean the path: remove leading/trailing slashes and normalize multiple slashes
   const cleanPath = path.replace(/^\/+|\/+$/g, '').replace(/\/+/g, '/');
   
-  // Add trailing slash if:
-  // 1. It's explicitly requested via forceTrailingSlash
-  // 2. The path exists (not homepage)
-  // 3. The path doesn't end with a file extension
-  // 4. The path is for a dynamic route (creators/, countries/, categories/, blog/)
-  const isDynamicRoute = /^(creators|countries|categories|blog)\//.test(cleanPath);
-  const shouldAddTrailingSlash = (forceTrailingSlash || isDynamicRoute || cleanPath) && 
-    !cleanPath.match(/\.[a-zA-Z0-9]+$/);
+  // Always add trailing slash except for:
+  // 1. Root URL (empty path)
+  // 2. URLs with file extensions (e.g., .jpg, .png)
+  const isFile = /\.[a-zA-Z0-9]+$/.test(cleanPath);
   
-  const finalPath = cleanPath && shouldAddTrailingSlash ? `${cleanPath}/` : cleanPath;
+  // Determine if we should add trailing slash
+  const shouldAddTrailingSlash = !isFile && cleanPath !== '';
   
-  // Combine and return
-  return cleanPath ? `${baseUrl}/${finalPath}` : baseUrl;
+  // Build final path
+  let finalPath = cleanPath;
+  if (shouldAddTrailingSlash && !finalPath.endsWith('/')) {
+    finalPath = `${finalPath}/`;
+  }
+  
+  // For root URL, never add trailing slash
+  if (!cleanPath) {
+    return baseUrl;
+  }
+  
+  // Combine and ensure no double slashes
+  return `${baseUrl}/${finalPath}`;
 }
 
 function truncateText(text: string, maxLength: number): string {
