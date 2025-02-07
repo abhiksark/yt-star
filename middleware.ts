@@ -8,58 +8,70 @@ const CANONICAL_REDIRECTS = new Map([
   ['/index', '/'],
   ['/index.html', '/'],
   ['/home', '/'],
-  ['/blog/index', '/blog'],
-  ['/categories/index', '/categories'],
-  ['/creator', '/creators'],
-  ['/category', '/categories'],
-  ['/articles', '/blog'],
-  ['/posts', '/blog'],
+  ['/blog/index', '/blog/'],
+  ['/categories/index', '/categories/'],
+  ['/creator', '/creators/'],
+  ['/category', '/categories/'],
+  ['/articles', '/blog/'],
+  ['/posts', '/blog/'],
 ]);
 
-// URLs that should be excluded from trailing slash normalization
-const EXCLUDE_TRAILING_SLASH_NORM = [
+// URLs that should be excluded from normalization
+const EXCLUDE_NORM = [
   '/_next',
   '/api',
   '/static',
+  '/sitemap.xml',
+  '/robots.txt',
+  '/favicon.ico',
+  '/manifest.json',
+  '/feed.xml',
+  '/.well-known',
 ];
 
-function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const currentPath = url.pathname;
+
+  // Skip processing for excluded paths
+  if (EXCLUDE_NORM.some(prefix => currentPath.startsWith(prefix))) {
+    return NextResponse.next();
+  }
 
   // Normalize multiple slashes in URL
   if (currentPath.includes('//')) {
     url.pathname = currentPath.replace(/\/+/g, '/');
-    return NextResponse.redirect(url, 301);
-  }
-
-  // Check if path should be excluded from processing
-  if (EXCLUDE_TRAILING_SLASH_NORM.some(prefix => currentPath.startsWith(prefix))) {
-    return NextResponse.next();
+    return NextResponse.redirect(url, 308);
   }
 
   // Handle index.html and trailing index
   if (currentPath.endsWith('index.html') || currentPath.endsWith('/index')) {
-    url.pathname = currentPath.replace(/(\/index)?\.html$|\/index$/, '');
-    return NextResponse.redirect(url, 301);
+    url.pathname = currentPath.replace(/(\/index)?\.html$|\/index$/, '/');
+    return NextResponse.redirect(url, 308);
   }
 
   // Handle canonical redirects
   const canonicalPath = CANONICAL_REDIRECTS.get(currentPath.toLowerCase());
   if (canonicalPath) {
     url.pathname = canonicalPath;
-    return NextResponse.redirect(url, 301);
+    return NextResponse.redirect(url, 308);
   }
 
-  // Normalize trailing slashes
-  if (currentPath !== '/' && currentPath.endsWith('/')) {
-    url.pathname = currentPath.slice(0, -1);
-    return NextResponse.redirect(url, 301);
+  // Add trailing slash if missing (except for root path)
+  if (currentPath !== '/' && !currentPath.endsWith('/')) {
+    url.pathname = `${currentPath}/`;
+    return NextResponse.redirect(url, 308);
   }
 
   // Handle uppercase URLs
   if (currentPath !== currentPath.toLowerCase()) {
     url.pathname = currentPath.toLowerCase();
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Handle www subdomain - redirect to non-www
+  if (request.headers.get('host')?.startsWith('www.')) {
+    url.host = url.host.replace(/^www\./, '');
     return NextResponse.redirect(url, 301);
   }
 
@@ -69,16 +81,10 @@ function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
-  // Handle www subdomain
-  if (request.headers.get('host')?.startsWith('www.')) {
-    url.host = url.host.replace(/^www\./, '');
-    return NextResponse.redirect(url, 301);
-  }
-
   return NextResponse.next();
 }
 
-const config = {
+export const config = {
   matcher: [
     /*
      * Match all request paths except:
@@ -87,9 +93,7 @@ const config = {
      * 3. /_static (inside /public)
      * 4. /_vercel (Vercel internals)
      * 5. Static files (e.g. /favicon.ico, /sitemap.xml)
-    */
-    '/((?!api|_next|_static|_vercel|[\\w-]+\\.\\w+).*)',
+     */
+    '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
   ],
 };
-
-export { middleware, config };
