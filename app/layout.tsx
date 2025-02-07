@@ -8,6 +8,7 @@ import { generateWebsiteSchema } from "@/lib/schema";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { cn, getCanonicalUrl } from "@/lib/utils";
+import { SEO_CONSTANTS } from "@/lib/types/seo";
 
 const inter = Inter({ subsets: ["latin"] });
 

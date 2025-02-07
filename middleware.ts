@@ -2,6 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { countryNames } from '@/lib/countries';
 
 // URLs that should redirect to their canonical versions
 const CANONICAL_REDIRECTS = new Map([
@@ -10,6 +11,7 @@ const CANONICAL_REDIRECTS = new Map([
   ['/home', '/'],
   ['/blog/index', '/blog/'],
   ['/categories/index', '/categories/'],
+  ['/countries/index', '/countries/'],
   ['/creator', '/creators/'],
   ['/category', '/categories/'],
   ['/articles', '/blog/'],
@@ -27,7 +29,12 @@ const EXCLUDE_NORM = [
   '/manifest.json',
   '/feed.xml',
   '/.well-known',
+  '/browserconfig.xml',
+  '/site.webmanifest',
 ];
+
+// Handle legacy country code URLs
+const COUNTRY_CODE_PATTERN = /^\/countries\/([a-z]{2})\/?$/i;
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
@@ -38,15 +45,20 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Handle legacy country code URLs
+  const countryMatch = currentPath.match(COUNTRY_CODE_PATTERN);
+  if (countryMatch) {
+    const countryCode = countryMatch[1].toUpperCase();
+    const countryName = countryNames[countryCode];
+    if (countryName) {
+      url.pathname = `/countries/${countryName.toLowerCase().replace(/\s+/g, '-')}/`;
+      return NextResponse.redirect(url, 308);
+    }
+  }
+
   // Normalize multiple slashes in URL
   if (currentPath.includes('//')) {
     url.pathname = currentPath.replace(/\/+/g, '/');
-    return NextResponse.redirect(url, 308);
-  }
-
-  // Handle index.html and trailing index
-  if (currentPath.endsWith('index.html') || currentPath.endsWith('/index')) {
-    url.pathname = currentPath.replace(/(\/index)?\.html$|\/index$/, '/');
     return NextResponse.redirect(url, 308);
   }
 
@@ -57,8 +69,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // Add trailing slash if missing (except for root path)
-  if (currentPath !== '/' && !currentPath.endsWith('/')) {
+  // Add trailing slash if missing (except for root path and static files)
+  if (currentPath !== '/' && 
+      !currentPath.endsWith('/') && 
+      !currentPath.match(/\.[a-zA-Z0-9]+$/)) {
     url.pathname = `${currentPath}/`;
     return NextResponse.redirect(url, 308);
   }

@@ -8,10 +8,39 @@ import { Suspense } from "react";
 import { CreatorGridSkeleton } from "@/components/skeletons";
 import { getCountryFromSlug, getCountryName, getCountrySlug, isValidCountryCode } from "@/lib/countries";
 import { getCanonicalUrl } from "@/lib/utils";
+import { SEO_CONSTANTS } from "@/lib/types/seo";
 
 interface CountryPageProps {
   params: {
     country: string;
+  };
+}
+
+function generateCountrySchema(countryName: string, url: string, creatorCount: number) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `${countryName} Tech Content Creators`,
+    "description": `Top ${creatorCount} tech content creators and programming educators from ${countryName}`,
+    "url": url,
+    "numberOfItems": creatorCount,
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": creatorCount,
+      "itemListOrder": "Descending",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "WebPage",
+            "name": `${countryName} Tech YouTubers`,
+            "description": `Find the best tech content creators from ${countryName}`,
+            "url": url
+          }
+        }
+      ]
+    }
   };
 }
 
@@ -32,7 +61,9 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
 
   const title = `Best ${countryName} Tech YouTubers and Content Creators`;
   const description = `Find the top ${countryCreators.length} tech content creators and programming educators from ${countryName}. Learn software development, system design, and web development from expert ${countryName} instructors.`;
-  const url = getCanonicalUrl(`countries/${params.country}`);
+  const url = getCanonicalUrl(`countries/${params.country}`, true);
+
+  const schema = generateCountrySchema(countryName, url, countryCreators.length);
 
   return {
     title,
@@ -55,8 +86,8 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
       description,
       url,
       type: 'website',
-      siteName: 'BestYoutubeChannels',
-      locale: 'en_US',
+      siteName: SEO_CONSTANTS.SITE_NAME,
+      locale: SEO_CONSTANTS.SOCIAL.LOCALE,
       images: [
         {
           url: getCanonicalUrl('og/countries.png'),
@@ -71,9 +102,19 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
       title,
       description,
       images: [getCanonicalUrl('og/countries.png')],
-      creator: '@bestyoutubechannels',
-      site: '@bestyoutubechannels',
+      creator: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
+      site: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
     },
+    other: {
+      'country-code': countryCode,
+      'content-language': 'en',
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    },
+    authors: [{ name: `${countryName} Tech Content Creators` }],
+    category: 'Technology',
+    applicationName: SEO_CONSTANTS.SITE_NAME,
   };
 }
 
@@ -108,12 +149,37 @@ export default async function CountryPage({ params }: CountryPageProps) {
     notFound();
   }
 
+  const url = getCanonicalUrl(`countries/${params.country}`, true);
+  const schema = generateCountrySchema(countryName, url, countryCreators.length);
+
   return (
     <Shell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema)
+        }}
+      />
       <div className="space-y-8">
-        <CountryHeader country={countryName} count={countryCreators.length} />
-        <Suspense fallback={<CreatorGridSkeleton />}>
-          <CreatorGrid creators={countryCreators} />
+        <CountryHeader 
+          country={countryName} 
+          count={countryCreators.length} 
+          countryCode={countryCode}
+        />
+        <Suspense 
+          fallback={
+            <div className="space-y-8">
+              <CreatorGridSkeleton />
+              <p className="text-center text-muted-foreground">
+                Loading {countryName} content creators...
+              </p>
+            </div>
+          }
+        >
+          <CreatorGrid 
+            creators={countryCreators} 
+            emptyMessage={`No content creators found from ${countryName} yet.`}
+          />
         </Suspense>
       </div>
     </Shell>
