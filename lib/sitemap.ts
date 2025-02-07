@@ -5,15 +5,16 @@ import { getCountryName, getCountrySlug, isValidCountryCode } from '@/lib/countr
 import { getCanonicalUrl } from '@/lib/utils';
 import { type RouteConfig, type SitemapEntry, type ChangeFrequency } from './types/seo';
 
+// Core routes should always have trailing slashes except for homepage
 const CORE_ROUTES: RouteConfig[] = [
   { path: '', priority: 1.0, changeFrequency: 'daily' },
-  { path: 'categories', priority: 0.9, changeFrequency: 'daily' },
-  { path: 'countries', priority: 0.9, changeFrequency: 'daily' },
-  { path: 'blog', priority: 0.8, changeFrequency: 'daily' },
-  { path: 'about', priority: 0.7, changeFrequency: 'weekly' },
-  { path: 'contact', priority: 0.6, changeFrequency: 'monthly' },
-  { path: 'terms', priority: 0.4, changeFrequency: 'yearly' },
-  { path: 'privacy', priority: 0.4, changeFrequency: 'yearly' },
+  { path: 'categories/', priority: 0.9, changeFrequency: 'daily' },
+  { path: 'countries/', priority: 0.9, changeFrequency: 'daily' },
+  { path: 'blog/', priority: 0.8, changeFrequency: 'daily' },
+  { path: 'about/', priority: 0.7, changeFrequency: 'weekly' },
+  { path: 'contact/', priority: 0.6, changeFrequency: 'monthly' },
+  { path: 'terms/', priority: 0.4, changeFrequency: 'yearly' },
+  { path: 'privacy/', priority: 0.4, changeFrequency: 'yearly' },
 ];
 
 function createSitemapEntry(
@@ -22,8 +23,12 @@ function createSitemapEntry(
   changeFrequency: ChangeFrequency, 
   lastModified: string = new Date().toISOString()
 ): SitemapEntry {
+  // Ensure path has trailing slash unless it's homepage or has file extension
+  const finalPath = path === '' ? '' : path.endsWith('/') ? path : `${path}/`;
+  
   return {
-    url: getCanonicalUrl(path, true),
+    // Remove www. to match middleware redirect
+    url: getCanonicalUrl(finalPath, true).replace(/^www\./, ''),
     lastModified,
     changeFrequency,
     priority,
@@ -39,7 +44,7 @@ async function generateDynamicRoutes(currentDate: string): Promise<SitemapEntry[
     createSitemapEntry(`categories/${category.slug}`, 0.8, 'daily', currentDate)
   );
 
-  // Generate country pages
+  // Generate country pages using full country names
   const countries = Array.from(
     new Set(
       creators
@@ -48,9 +53,12 @@ async function generateDynamicRoutes(currentDate: string): Promise<SitemapEntry[
     )
   ).sort();
 
-  const countryUrls = countries.map(countryCode => 
-    createSitemapEntry(`countries/${getCountrySlug(countryCode)}`, 0.8, 'daily', currentDate)
-  );
+  const countryUrls = countries.map(countryCode => {
+    const countryName = getCountryName(countryCode);
+    // Ensure consistent URL format with middleware
+    const countrySlug = countryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return createSitemapEntry(`countries/${countrySlug}`, 0.8, 'daily', currentDate);
+  });
 
   // Generate creator pages
   const creatorUrls = creators.map(creator => 
@@ -79,12 +87,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Combine all routes
   const allUrls = [...coreRoutes, ...dynamicRoutes];
 
+  // Normalize all URLs to ensure consistency
+  const normalizedUrls = allUrls.map(entry => ({
+    ...entry,
+    url: entry.url
+      .toLowerCase()
+      .replace(/^www\./, '')
+      .replace(/([^:]\/)\/+/g, '$1')
+  }));
+
   // Remove duplicates (keeping higher priority ones)
   return Array.from(
     new Map(
-      allUrls
+      normalizedUrls
         .sort((a, b) => (b.priority || 0) - (a.priority || 0))
-        .map(item => [item.url.toLowerCase(), item])
+        .map(item => [item.url, item])
     ).values()
   );
 }
