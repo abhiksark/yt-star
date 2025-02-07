@@ -17,6 +17,7 @@ export interface Creator {
 export interface Category {
   name: string;
   slug: string;
+  description?: string;
 }
 
 export interface Country {

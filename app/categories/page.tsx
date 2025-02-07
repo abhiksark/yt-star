@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 
 const title = "Tech Tutorial Categories - Programming & Development Topics";
 const description = "Browse expert tech tutorials by category. Find top educators in System Design, Frontend, Backend, DevOps, Machine Learning, and more. Curated list of the best programming tutorial channels.";
-const url = getCanonicalUrl('categories', true);
+const url = getCanonicalUrl('categories');
 
 function generateCategoriesSchema() {
   return {
@@ -32,7 +32,7 @@ function generateCategoriesSchema() {
           "@type": "Thing",
           "name": category.name,
           "description": `Find the best ${category.name} tutorial creators and educational content`,
-          "url": getCanonicalUrl(`categories/${category.slug}`, true)
+          "url": getCanonicalUrl(`categories/${category.slug}`)
         }
       }))
     }

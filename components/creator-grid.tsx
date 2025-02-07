@@ -2,57 +2,83 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { StarRating } from "@/components/star-rating";
+import { cn } from "@/lib/utils";
 import type { Creator } from "@/lib/types";
 
 interface CreatorGridProps {
   creators: Creator[];
+  emptyMessage?: string;
 }
 
-export function CreatorGrid({ creators }: CreatorGridProps) {
+export function CreatorGrid({ creators, emptyMessage = "No creators found." }: CreatorGridProps) {
+  if (!creators.length) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        {emptyMessage}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      {creators.map((creator) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {creators.map((creator, index) => (
         <Link key={creator.slug} href={`/creators/${creator.slug}`}>
-          <Card className="group h-full p-4 sm:p-6 hover:shadow-lg transition-all hover:-translate-y-1 hover:bg-accent/5">
-            <div className="flex items-start gap-3 sm:gap-4">
-              <Avatar className="h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-                <img 
-                  src={creator.logoUrl} 
-                  alt={`${creator.name} - ${creator.categories.join(', ')} Content Creator`}
-                  loading="lazy"
-                />
-              </Avatar>
-              <div>
-                <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
-                  {creator.name}
-                </h3>
+          <Card 
+            className={cn(
+              "h-full hover:shadow-lg transition-all duration-300 overflow-hidden group",
+              "opacity-0 animate-fade-up hover:scale-[1.02] hover:-translate-y-1",
+              `animation-delay-${(index % 9 + 1) * 100}`
+            )}
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-16 h-16 rounded-xl ring-2 ring-border group-hover:ring-primary transition-colors">
+                    <img src={creator.logoUrl || ''} alt={creator.name} className="object-cover" />
+                  </Avatar>
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-lg leading-none group-hover:text-primary transition-colors">
+                      {creator.name}
+                    </h3>
+                    {creator.country && (
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={`https://flagcdn.com/${creator.country.toLowerCase()}.svg`}
+                          alt={`${creator.country} flag`}
+                          className="w-4 h-4 rounded-sm"
+                          loading="lazy"
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {creator.country}
+                        </span>
+                      </div>
+                    )}
+                    <StarRating rating={creator.rating || 0} className="scale-90" />
+                  </div>
+                </div>
               </div>
-            </div>
-            <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-              {creator.description || `${creator.name} is a content creator focusing on ${creator.categories[0]}`}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {creator.categories.slice(0, 3).map((category) => (
-                <Badge
-                  key={category}
-                  variant="secondary"
-                  className="text-xs group-hover:bg-accent/20 transition-colors"
-                >
-                  {category}
-                </Badge>
-              ))}
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm font-medium">
-                {creator.subscriberCount} subscribers
+              <p className="text-sm text-muted-foreground line-clamp-2 group-hover:text-muted-foreground/80 transition-colors">
+                {creator.description}
               </p>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: creator.complexity }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary/60 group-hover:bg-primary rounded-full transition-colors"
-                  />
+              <div className="flex flex-wrap gap-2">
+                {creator.categories.slice(0, 3).map((category) => (
+                  <Badge 
+                    key={category} 
+                    variant="secondary" 
+                    className="text-xs group-hover:bg-primary/10 transition-colors"
+                  >
+                    {category}
+                  </Badge>
                 ))}
+                {creator.categories.length > 3 && (
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs group-hover:bg-primary/10 transition-colors"
+                  >
+                    +{creator.categories.length - 3} more
+                  </Badge>
+                )}
               </div>
             </div>
           </Card>

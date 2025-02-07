@@ -9,6 +9,7 @@ import { CreatorGridSkeleton } from "@/components/skeletons";
 import { getCountryFromSlug, getCountryName, getCountrySlug, isValidCountryCode } from "@/lib/countries";
 import { getCanonicalUrl } from "@/lib/utils";
 import { SEO_CONSTANTS } from "@/lib/types/seo";
+import type { Creator } from "@/lib/types";
 
 interface CountryPageProps {
   params: {
@@ -16,7 +17,7 @@ interface CountryPageProps {
   };
 }
 
-function generateCountrySchema(countryName: string, url: string, creatorCount: number, creators: any[]) {
+function generateCountrySchema(countryName: string, url: string, creatorCount: number, creators: Creator[]) {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -35,7 +36,7 @@ function generateCountrySchema(countryName: string, url: string, creatorCount: n
           "@type": "Person",
           "name": creator.name,
           "description": creator.description,
-          "url": getCanonicalUrl(`creators/${creator.slug}`, true),
+          "url": getCanonicalUrl(`creators/${creator.slug}`),
           "image": creator.logoUrl,
           "jobTitle": "Tech Content Creator",
           "worksFor": {
@@ -59,7 +60,7 @@ function generateCountrySchema(countryName: string, url: string, creatorCount: n
           "@type": "ListItem",
           "position": 2,
           "name": "Countries",
-          "item": getCanonicalUrl("countries", true)
+          "item": getCanonicalUrl("countries")
         },
         {
           "@type": "ListItem",
@@ -89,13 +90,19 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
 
   const creatorCount = countryCreators.length;
   const categories = Array.from(new Set(countryCreators.flatMap(c => c.categories))).slice(0, 5);
-  const topCreators = countryCreators.sort((a, b) => (b.subscriberCount || 0) - (a.subscriberCount || 0)).slice(0, 3);
-  const totalSubscribers = countryCreators.reduce((sum, c) => sum + (c.subscriberCount || 0), 0);
-  const avgRating = countryCreators.reduce((sum, c) => sum + (c.rating || 0), 0) / creatorCount;
+  const topCreators = countryCreators
+    .sort((a, b) => {
+      const subscribersA = typeof a.subscriberCount === 'number' ? a.subscriberCount : 0;
+      const subscribersB = typeof b.subscriberCount === 'number' ? b.subscriberCount : 0;
+      return subscribersB - subscribersA;
+    })
+    .slice(0, 3);
+  const totalSubscribers = countryCreators.reduce((sum, c) => sum + (typeof c.subscriberCount === 'number' ? c.subscriberCount : 0), 0);
+  const avgRating = countryCreators.reduce((sum, c) => sum + (typeof c.rating === 'number' ? c.rating : 0), 0) / creatorCount;
 
   const title = `Best ${countryName} Tech YouTubers and Programming Educators (${new Date().getFullYear()})`;
   const description = `Discover ${creatorCount} top tech content creators from ${countryName}. Learn ${categories.join(', ')} from expert instructors like ${topCreators.map(c => c.name).join(', ')}. Join ${totalSubscribers.toLocaleString()} learners worldwide.`;
-  const url = getCanonicalUrl(`countries/${params.country}`, true);
+  const url = getCanonicalUrl(`countries/${params.country}`);
 
   const schema = generateCountrySchema(countryName, url, creatorCount, countryCreators);
 
@@ -159,7 +166,7 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
     },
     authors: countryCreators.slice(0, 5).map(creator => ({ 
       name: creator.name,
-      url: getCanonicalUrl(`creators/${creator.slug}`, true),
+      url: getCanonicalUrl(`creators/${creator.slug}`),
     })),
     category: 'Technology',
     applicationName: SEO_CONSTANTS.SITE_NAME,
@@ -176,9 +183,13 @@ export async function generateStaticParams() {
     )
   );
   
-  return countries.map((countryCode) => ({
-    country: getCountrySlug(countryCode),
-  }));
+  return countries.map((countryCode) => {
+    const countryName = getCountryName(countryCode);
+    return {
+      slug: countryName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      country: getCountrySlug(countryCode),
+    };
+  });
 }
 
 export default async function CountryPage({ params }: CountryPageProps) {
@@ -197,7 +208,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
     notFound();
   }
 
-  const url = getCanonicalUrl(`countries/${params.country}`, true);
+  const url = getCanonicalUrl(`countries/${params.country}`);
   const schema = generateCountrySchema(countryName, url, countryCreators.length, countryCreators);
 
   return (
