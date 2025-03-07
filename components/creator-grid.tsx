@@ -27,8 +27,7 @@ export function CreatorGrid({ creators, emptyMessage = "No creators found." }: C
           <Card 
             className={cn(
               "h-full hover:shadow-lg transition-all duration-300 overflow-hidden group",
-              "opacity-0 animate-fade-up hover:scale-[1.02] hover:-translate-y-1",
-              `animation-delay-${(index % 9 + 1) * 100}`
+              "hover:scale-[1.02] hover:-translate-y-1"
             )}
           >
             <div className="p-6 space-y-4">

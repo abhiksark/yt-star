@@ -43,7 +43,12 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   const creators = await getCreators();
   const categoryCreators = creators.filter((creator) =>
-    creator.categories.includes(category.slug)
+    // Use flexible matching to handle different formats of category names
+    creator.categories?.some(cat => 
+      cat.toLowerCase() === category.slug.toLowerCase() ||
+      cat.toLowerCase().replace(/\s+/g, '-') === category.slug.toLowerCase() ||
+      cat.toLowerCase() === category.slug.toLowerCase().replace(/-/g, ' ')
+    )
   );
 
   const title = `${category.name} Tutorial Creators - Top ${categoryCreators.length} ${category.name} Educators`;
@@ -120,8 +125,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!category) notFound();
 
   const creators = await getCreators();
+  
+  // Fix the category filtering to match the same logic used in CategoryList component
   const categoryCreators = creators.filter((creator) =>
-    creator.categories.includes(category.slug)
+    // Use flexible matching to handle different formats of category names
+    creator.categories?.some(cat => 
+      cat.toLowerCase() === category.slug.toLowerCase() ||
+      cat.toLowerCase().replace(/\s+/g, '-') === category.slug.toLowerCase() ||
+      cat.toLowerCase() === category.slug.toLowerCase().replace(/-/g, ' ')
+    )
   );
 
   return (
@@ -137,19 +149,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           {/* Decorative background elements */}
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background to-background/80" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
-          <div className="absolute inset-0 -z-10 animate-gradient bg-[size:200%_200%] bg-[linear-gradient(45deg,var(--primary)/10,var(--accent)/10,var(--secondary)/10,var(--primary)/10)]" />
+          <div className="absolute inset-0 -z-10 bg-[size:200%_200%] bg-[linear-gradient(45deg,var(--primary)/10,var(--accent)/10,var(--secondary)/10,var(--primary)/10)]" />
 
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight animate-title opacity-0" style={{ animationDelay: '200ms' }}>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
               {category.name} Creators
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl animate-fade-up opacity-0" style={{ animationDelay: '400ms' }}>
+            <p className="text-xl text-muted-foreground max-w-3xl">
               {categoryCreators.length} expert {category.name.toLowerCase()} educators sharing their knowledge and experience.
             </p>
           </div>
         </div>
 
-        <div className="animate-fade-up opacity-0" style={{ animationDelay: '600ms' }}>
+        <div>
           <CreatorGrid 
             creators={categoryCreators} 
             emptyMessage={`No ${category.name.toLowerCase()} content creators found yet.`}
