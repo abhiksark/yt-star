@@ -19,7 +19,7 @@ function generateCategorySchema(categoryName: string, categorySlug: string, crea
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": `${categoryName} Tutorial Creators`,
-    "description": `Discover the top ${creatorCount} ${categoryName.toLowerCase()} tutorial creators and educators. Find expert-led content for learning ${categoryName.toLowerCase()} programming and development.`,
+    "description": `Discover the top ${categoryName.toLowerCase()} tutorial creators and educators. Find expert-led content for learning ${categoryName.toLowerCase()} programming and development.`,
     "url": url,
     "mainEntity": {
       "@type": "ItemList",
@@ -39,78 +39,54 @@ function generateCategorySchema(categoryName: string, categorySlug: string, crea
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const category = categories.find((c) => c.slug === params.slug);
-  if (!category) return {};
-
-  const creators = await getCreators();
-  const categoryCreators = creators.filter((creator) =>
-    // Use flexible matching to handle different formats of category names
-    creator.categories?.some(cat => 
-      cat.toLowerCase() === category.slug.toLowerCase() ||
-      cat.toLowerCase().replace(/\s+/g, '-') === category.slug.toLowerCase() ||
-      cat.toLowerCase() === category.slug.toLowerCase().replace(/-/g, ' ')
-    )
-  );
-
-  const title = `${category.name} Tutorial Creators - Top ${categoryCreators.length} ${category.name} Educators`;
-  const description = `Find the best ${category.name} tutorial creators. Learn from ${categoryCreators.length} expert educators in ${category.name.toLowerCase()} programming and development. Curated list of top ${category.name.toLowerCase()} channels.`;
-  const url = getCanonicalUrl(`categories/${category.slug}`);
+  
+  if (!category) {
+    return {
+      title: "Category Not Found",
+      description: "The category you're looking for doesn't exist."
+    };
+  }
+  
+  // Get creators for this category for the count
+  const categoryCreators = await getCreators();
+  
+  // Create SEO-friendly title and description
+  const title = `Top ${category.name} Content Creators & Tutorials`;
+  const description = `Discover ${categoryCreators.length || 'expert'} content creators specializing in ${category.name}. Find highly-rated tutorials, courses, and educational content for ${category.name} learning and mastery.`;
+  
+  // Construct related technologies based on the category
+  const relatedTechnologies = getRelatedTechnologies(category.name);
+  
+  // SEO-optimized keywords for the category
+  const keywords = `${category.name}, ${category.name} tutorials, learn ${category.name}, ${category.name} courses, ${relatedTechnologies.join(', ')}, programming education, tech content creators`;
 
   return {
     title,
     description,
-    keywords: [
-      `${category.name.toLowerCase()} tutorials`,
-      `${category.name.toLowerCase()} courses`,
-      `learn ${category.name.toLowerCase()}`,
-      `${category.name.toLowerCase()} education`,
-      `${category.name.toLowerCase()} programming`,
-      `${category.name.toLowerCase()} development`,
-      `best ${category.name.toLowerCase()} creators`,
-      `top ${category.name.toLowerCase()} educators`,
-      `${category.name.toLowerCase()} learning resources`,
-      `${category.name.toLowerCase()} video tutorials`
-    ],
+    keywords,
     alternates: {
-      canonical: url,
+      canonical: `https://www.bestyoutubechannels.com/categories/${params.slug}`,
     },
     openGraph: {
+      type: 'website',
       title,
       description,
-      url,
-      type: 'website',
-      siteName: SEO_CONSTANTS.SITE_NAME,
-      locale: SEO_CONSTANTS.SOCIAL.LOCALE,
+      url: `https://www.bestyoutubechannels.com/categories/${params.slug}`,
       images: [
         {
-          url: getCanonicalUrl(`og/categories/${category.slug}.png`),
+          url: `https://www.bestyoutubechannels.com/images/categories/${params.slug}.jpg`,
           width: 1200,
           height: 630,
-          alt: `${category.name} Tutorial Creators`,
+          alt: `${category.name} Tutorials and Content Creators`,
         }
-      ],
+      ]
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [getCanonicalUrl(`og/categories/${category.slug}.png`)],
-      creator: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
-      site: SEO_CONSTANTS.SOCIAL.TWITTER_HANDLE,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      'max-snippet': -1,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
+      images: [`https://www.bestyoutubechannels.com/images/categories/${params.slug}.jpg`],
+    }
   };
 }
 
@@ -122,52 +98,90 @@ export async function generateStaticParams() {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const category = categories.find((c) => c.slug === params.slug);
-  if (!category) notFound();
-
-  const creators = await getCreators();
   
-  // Fix the category filtering to match the same logic used in CategoryList component
-  const categoryCreators = creators.filter((creator) =>
-    // Use flexible matching to handle different formats of category names
-    creator.categories?.some(cat => 
-      cat.toLowerCase() === category.slug.toLowerCase() ||
-      cat.toLowerCase().replace(/\s+/g, '-') === category.slug.toLowerCase() ||
-      cat.toLowerCase() === category.slug.toLowerCase().replace(/-/g, ' ')
-    )
-  );
-
+  if (!category) {
+    notFound();
+  }
+  
+  const categoryCreators = await getCreators();
+  
   return (
-    <Shell>
+    <>
+      <Shell>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateCategorySchema(category.name, category.slug, categoryCreators.length))
+          }}
+        />
+        <div className="space-y-8">
+          <div className="relative space-y-6 pb-8">
+            {/* Decorative background elements */}
+            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background to-background/80" />
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
+            <div className="absolute inset-0 -z-10 bg-[size:200%_200%] bg-[linear-gradient(45deg,var(--primary)/10,var(--accent)/10,var(--secondary)/10,var(--primary)/10)]" />
+
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                {category.name} Creators
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-3xl">
+                {categoryCreators.length} expert {category.name.toLowerCase()} educators sharing their knowledge and experience.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <CreatorGrid 
+              creators={categoryCreators} 
+              emptyMessage={`No ${category.name.toLowerCase()} content creators found yet.`}
+            />
+          </div>
+        </div>
+      </Shell>
+      
+      {/* Keep the JSON-LD structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateCategorySchema(category.name, category.slug, categoryCreators.length))
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": `Top ${category.name} Content Creators & Tutorials`,
+            "description": `Discover content creators specializing in ${category.name}. Find highly-rated tutorials and courses.`,
+            "url": `https://www.bestyoutubechannels.com/categories/${params.slug}`,
+            "about": {
+              "@type": "Thing",
+              "name": category.name,
+              "description": category.description
+            },
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Tech Content Creators Platform",
+              "url": "https://www.bestyoutubechannels.com"
+            }
+          })
         }}
       />
-      <div className="space-y-8">
-        <div className="relative space-y-6 pb-8">
-          {/* Decorative background elements */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background to-background/80" />
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
-          <div className="absolute inset-0 -z-10 bg-[size:200%_200%] bg-[linear-gradient(45deg,var(--primary)/10,var(--accent)/10,var(--secondary)/10,var(--primary)/10)]" />
-
-          <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              {category.name} Creators
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl">
-              {categoryCreators.length} expert {category.name.toLowerCase()} educators sharing their knowledge and experience.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <CreatorGrid 
-            creators={categoryCreators} 
-            emptyMessage={`No ${category.name.toLowerCase()} content creators found yet.`}
-          />
-        </div>
-      </div>
-    </Shell>
+    </>
   );
+}
+
+// Helper function to get related technologies based on category name
+function getRelatedTechnologies(categoryName: string): string[] {
+  const technologiesMap: Record<string, string[]> = {
+    "Web Development": ["HTML", "CSS", "JavaScript", "React", "Next.js", "Angular", "Vue"],
+    "Backend Development": ["Node.js", "Express", "Django", "Flask", "Spring Boot", "Ruby on Rails"],
+    "Mobile Development": ["React Native", "Flutter", "Swift", "Kotlin", "iOS", "Android"],
+    "Data Science": ["Python", "R", "Pandas", "NumPy", "Jupyter", "TensorFlow", "PyTorch"],
+    "DevOps": ["Docker", "Kubernetes", "Jenkins", "GitHub Actions", "AWS", "Azure", "GCP"],
+    "Cloud Computing": ["AWS", "Azure", "GCP", "Serverless", "Microservices", "Infrastructure as Code"],
+    "Game Development": ["Unity", "Unreal Engine", "C#", "C++", "Godot", "3D Modeling"],
+    "Artificial Intelligence": ["Machine Learning", "Deep Learning", "Neural Networks", "NLP", "Computer Vision"],
+    "Blockchain": ["Ethereum", "Solidity", "Web3", "Smart Contracts", "NFTs", "Cryptocurrencies"],
+    "Cybersecurity": ["Network Security", "Ethical Hacking", "Penetration Testing", "Encryption", "Security Protocols"]
+  };
+  
+  // Return related technologies if exists, otherwise return generic tech terms
+  return technologiesMap[categoryName] || ["Programming", "Software Development", "Coding", "Tech Education"];
 } 
