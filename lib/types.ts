@@ -12,6 +12,9 @@ export interface Creator {
   categories: string[];
   complexity: number;
   rating?: number;
+  channelId: string;
+  bannerUrl: string;
+  totalRatings?: number;
 }
 
 export interface Category {

@@ -10,6 +10,7 @@ import type { Creator } from "@/lib/types";
 interface SimilarCreatorsProps {
   currentCreator: Creator;
   allCreators: Creator[];
+  enhanced?: boolean;
 }
 
 export function SimilarCreators({ currentCreator, allCreators }: SimilarCreatorsProps) {
